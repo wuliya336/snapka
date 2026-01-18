@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/KarinJS/snapka/compare/playwright-v0.1.6...playwright-v0.1.7) (2026-01-18)
+
+
+### 🐛 Bug Fixes
+
+* 透明度 ([e97a6d6](https://github.com/KarinJS/snapka/commit/e97a6d61c7293af8137201b3d8710fa61b92920c))
+
 ## [0.1.6](https://github.com/KarinJS/snapka/compare/playwright-v0.1.5...playwright-v0.1.6) (2025-12-04)
 
 
