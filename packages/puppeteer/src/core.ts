@@ -392,7 +392,11 @@ export class PuppeteerCore {
     page: Page,
     options: SnapkaScreenshotOptions<T>
   ): Promise<T extends 'base64' ? string : Uint8Array> {
-    return await page.screenshot(options) as T extends 'base64' ? string : Uint8Array
+    const screenshotOptions = {
+      ...options,
+      omitBackground: options.omitBackground ?? (!!(options.type === 'png' || !options.type)),
+    }
+    return await page.screenshot(screenshotOptions) as T extends 'base64' ? string : Uint8Array
   }
 
   /**
@@ -407,7 +411,11 @@ export class PuppeteerCore {
   ): Promise<T extends 'base64' ? string : Uint8Array> {
     const element = await this.findElement(page, options.selector)
     if (!element) throw new Error('当前页面未找到任何可截图的元素')
-    return await element.screenshot(options) as T extends 'base64' ? string : Uint8Array
+    const screenshotOptions = {
+      ...options,
+      omitBackground: options.omitBackground ?? (!!(options.type === 'png' || !options.type)),
+    }
+    return await element.screenshot(screenshotOptions) as T extends 'base64' ? string : Uint8Array
   }
 
   /**
@@ -432,6 +440,7 @@ export class PuppeteerCore {
       const { y, height } = this.calculatePageDimensions(pageIndex, viewportHeight, boxHeight)
       const img = await element!.screenshot({
         ...options,
+        omitBackground: options.omitBackground ?? (!!(options.type === 'png' || !options.type)),
         clip: { x: 0, y, width: boxWidth, height },
       }) as T extends 'base64' ? string : Uint8Array
       data.push(img)

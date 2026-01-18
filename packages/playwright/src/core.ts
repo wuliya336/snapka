@@ -276,11 +276,12 @@ export class PlaywrightCore {
     page: Page,
     options: SnapkaScreenshotOptions<T>
   ): Promise<T extends 'base64' ? string : Uint8Array> {
+    const type = options.type === 'webp' ? 'png' : options.type
     const screenshotOptions: any = {
-      type: options.type === 'webp' ? 'png' : options.type,
+      type,
       quality: options.quality,
       fullPage: true,
-      omitBackground: options.omitBackground,
+      omitBackground: options.omitBackground ?? (type === 'png'),
       path: options.path,
       ...(options.playwright || {}),
     }
@@ -305,10 +306,11 @@ export class PlaywrightCore {
     const element = await this.findElement(page, options.selector)
     if (!element) throw new Error('当前页面未找到任何可截图的元素')
 
+    const type = options.type === 'webp' ? 'png' : options.type
     const screenshotOptions: any = {
-      type: options.type === 'webp' ? 'png' : options.type,
+      type,
       quality: options.quality,
-      omitBackground: options.omitBackground,
+      omitBackground: options.omitBackground ?? (type === 'png'),
       path: options.path,
       ...(options.playwright || {}),
     }
@@ -337,14 +339,15 @@ export class PlaywrightCore {
     const viewportHeight = Math.max(toInteger(options.viewportHeight, 2000), 1)
     const totalPages = Math.ceil(boxHeight / viewportHeight)
     const data: (string | Uint8Array)[] = []
+    const type = options.type === 'webp' ? 'png' : options.type
 
     for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
       const { y, height } = this.calculatePageDimensions(pageIndex, viewportHeight, boxHeight)
 
       const screenshotOptions: any = {
-        type: options.type === 'webp' ? 'png' : options.type,
+        type,
         quality: options.quality,
-        omitBackground: options.omitBackground,
+        omitBackground: options.omitBackground ?? (type === 'png'),
         clip: { x: 0, y, width: boxWidth, height },
         ...(options.playwright || {}),
       }

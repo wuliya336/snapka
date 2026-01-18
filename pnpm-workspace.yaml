@@ -1,7 +1,11 @@
 packages:
-  - "packages/*"
+  - packages/*
 
 catalog:
-  p-limit: "7.2.0"
-  "@karinjs/express": "1.1.4"
-  cosmiconfig: "9.0.0"
+  '@karinjs/express': 1.1.4
+  cosmiconfig: 9.0.0
+  p-limit: 7.2.0
+
+onlyBuiltDependencies:
+  - esbuild
+  - unrs-resolver
