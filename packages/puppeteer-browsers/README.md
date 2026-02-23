@@ -741,44 +741,45 @@ interface ProfileOptions {
 
 #### probeUrls()
 
-URL 探针，返回第一个符合状态码条件的 URL。
+URL 探针，返回第一个可达的 URL。
+
+仅探测域名（origin）的可达性，任何 HTTP 响应都视为可达，只有网络错误（超时、DNS 失败等）才视为失败。
 
 ```typescript
 function probeUrls(
   urls: (URL | string)[],
   options?: {
-    validStatusCodes?: number[]
     timeout?: number
+    staggerDelay?: number
   }
 ): Promise<string>
 ```
 
 **参数**:
 
-- `urls` - 要检测的 URL 列表
+- `urls` - 要检测的 URL 列表（靠前的优先级更高）
 - `options` - （可选）配置选项
-  - `validStatusCodes` - 有效的状态码数组，默认 `[200]`
   - `timeout` - 超时时间（毫秒），默认 `5000`
+  - `staggerDelay` - 每个后续 URL 相对于前一个的延迟（ms），默认 `300`
 
-**返回**: 第一个成功的 URL，如果全部失败则抛出错误
+**返回**: 第一个可达的 URL，如果全部失败则抛出错误
 
 **示例**:
 
 ```typescript
 import { probeUrls } from '@snapka/browsers'
 
-// 使用默认配置（状态码 200，超时 5 秒）
+// 使用默认配置（超时 5 秒）
 const fastestUrl = await probeUrls([
   'https://registry.npmmirror.com/-/binary/chromium-browser-snapshots',
   'https://storage.googleapis.com/chromium-browser-snapshots',
   'https://example.com/mirror'
 ])
 
-// 自定义状态码和超时
+// 自定义超时
 const fastestUrl = await probeUrls(
   ['url1', 'url2', 'url3'],
   {
-    validStatusCodes: [200, 301, 302],
     timeout: 10000
   }
 )
@@ -786,8 +787,9 @@ const fastestUrl = await probeUrls(
 
 **工作原理**:
 
-- 同时向所有 URL 发起 HEAD 请求
-- 返回第一个符合状态码条件的 URL
+- 仅对 URL 的 origin（域名）发起 HEAD 请求，不带路径
+- 任何 HTTP 响应（包括 404、403）都视为服务器可达
+- 优先使用列表中靠前的 URL，后续 URL 延迟发起
 - 使用 `Promise.any`，只要有一个成功就立即返回
 - 所有 URL 都失败时抛出错误
 

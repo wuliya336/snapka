@@ -92,25 +92,27 @@ export async function getText (url: URL | string): Promise<string> {
 }
 
 /**
- * URL 探针：返回第一个符合状态码条件的 URL
+ * URL 探针：返回第一个可达的 URL
+ *
+ * 仅探测域名（origin）的可达性，要求返回 200 状态码。
+ * 如果所有探针都失败，兜底返回列表中第一个 URL。
  *
  * 优先使用列表中靠前的 URL（默认阿里云镜像），
  * 后续 URL 会延迟发起请求，给优先源一个时间窗口。
  *
  * @param urls - 要检测的 URL 列表（靠前的优先级更高）
  * @param options - 配置选项
- * @returns 第一个成功的 URL，如果全部失败则抛出错误
+ * @returns 第一个探测成功的 URL，全部失败时返回第一个 URL 作为兜底
  */
 export async function probeUrls (
   urls: (URL | string)[],
   options?: {
-    validStatusCodes?: number[]
     timeout?: number
     /** 每个后续 URL 相对于前一个的延迟（ms） @default 300 */
     staggerDelay?: number
   }
 ): Promise<string> {
-  const { validStatusCodes = [200], timeout = 5000, staggerDelay = 300 } = options || {}
+  const { timeout = 5000, staggerDelay = 300 } = options || {}
 
   if (urls.length === 0) {
     throw new Error('URL list cannot be empty')
@@ -122,12 +124,14 @@ export async function probeUrls (
       await new Promise(resolve => setTimeout(resolve, staggerDelay * index))
     }
     try {
-      const response = await axios.head(url.toString(), {
+      // 仅探测域名可达性，不带路径
+      const origin = new URL(url.toString()).origin
+      const response = await axios.head(origin, {
         timeout,
-        validateStatus: (status) => validStatusCodes.includes(status),
+        validateStatus: (status) => status === 200,
       })
 
-      if (validStatusCodes.includes(response.status)) {
+      if (response.status === 200) {
         return url.toString()
       }
 
@@ -137,5 +141,10 @@ export async function probeUrls (
     }
   })
 
-  return Promise.any(probePromises)
+  try {
+    return await Promise.any(probePromises)
+  } catch {
+    // 所有探针失败，兜底返回第一个 URL（默认阿里云镜像）
+    return urls[0]!.toString()
+  }
 }

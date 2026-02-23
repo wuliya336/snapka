@@ -69,44 +69,42 @@ describe('httpUtil', () => {
 
     it('应该返回第一个可用的 URL', async () => {
       vi.mocked(axios.head).mockResolvedValue({ status: 200 })
-      const result = await probeUrls(['https://mirror.example.com', 'https://origin.example.com'])
-      expect(result).toBe('https://mirror.example.com')
+      const result = await probeUrls(['https://mirror.example.com/path/to/resource', 'https://origin.example.com/path'])
+      expect(result).toBe('https://mirror.example.com/path/to/resource')
+      // 应该仅探测 origin，不带路径
+      expect(axios.head).toHaveBeenCalledWith(
+        'https://mirror.example.com',
+        expect.objectContaining({ validateStatus: expect.any(Function) })
+      )
     })
 
-    it('当第一个 URL 失败时应该回退到第二个', async () => {
+    it('当第一个 URL 网络不可达时应该回退到第二个', async () => {
       vi.useFakeTimers()
       vi.mocked(axios.head)
         .mockRejectedValueOnce(new Error('timeout'))
         .mockResolvedValueOnce({ status: 200 })
 
       const promise = probeUrls(
-        ['https://failed.example.com', 'https://ok.example.com'],
+        ['https://failed.example.com/path', 'https://ok.example.com/path'],
         { staggerDelay: 0 }
       )
       await vi.advanceTimersByTimeAsync(100)
       const result = await promise
-      expect(result).toBe('https://ok.example.com')
+      expect(result).toBe('https://ok.example.com/path')
     })
 
-    it('所有 URL 都失败时应该抛出 AggregateError', async () => {
+    it('所有 URL 都失败时应该兜底返回第一个 URL', async () => {
       vi.mocked(axios.head).mockRejectedValue(new Error('all failed'))
-      await expect(
-        probeUrls(['https://a.com', 'https://b.com'], { staggerDelay: 0 })
-      ).rejects.toThrow()
-    })
-
-    it('应该支持自定义状态码', async () => {
-      vi.mocked(axios.head).mockResolvedValue({ status: 403 })
       const result = await probeUrls(
-        ['https://example.com'],
-        { validStatusCodes: [403] }
+        ['https://a.com/path', 'https://b.com/path'],
+        { staggerDelay: 0 }
       )
-      expect(result).toBe('https://example.com')
+      expect(result).toBe('https://a.com/path')
     })
 
     it('应该支持自定义超时', async () => {
       vi.mocked(axios.head).mockResolvedValue({ status: 200 })
-      await probeUrls(['https://example.com'], { timeout: 1000 })
+      await probeUrls(['https://example.com/path'], { timeout: 1000 })
       expect(axios.head).toHaveBeenCalledWith(
         'https://example.com',
         expect.objectContaining({ timeout: 1000 })
