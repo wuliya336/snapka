@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/KarinJS/snapka/compare/puppeteer-core-v0.1.3...puppeteer-core-v0.1.4) (2026-02-23)
+
+
+### 🐛 Bug Fixes
+
+* 修复各包单元测试并更新断言以匹配源码 ([8c343c5](https://github.com/KarinJS/snapka/commit/8c343c57d75800ef6dd6d9a6417b9c19970e89b4))
+
 ## [0.1.3](https://github.com/KarinJS/snapka/compare/puppeteer-core-v0.1.2...puppeteer-core-v0.1.3) (2025-12-03)
 
 

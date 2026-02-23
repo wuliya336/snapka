@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.6](https://github.com/KarinJS/snapka/compare/browser-finder-v0.1.5...browser-finder-v0.1.6) (2026-02-23)
+
+
+### 🐛 Bug Fixes
+
+* security and logic improvements across all packages ([9394626](https://github.com/KarinJS/snapka/commit/93946268d2031236494c05040efa8d38fb666ca9))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @snapka/browsers bumped to 0.2.0
+
 ## [0.1.5](https://github.com/KarinJS/snapka/compare/browser-finder-v0.1.4...browser-finder-v0.1.5) (2025-12-04)
 
 
