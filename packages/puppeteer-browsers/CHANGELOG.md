@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.0](https://github.com/KarinJS/snapka/compare/browsers-v0.1.4...browsers-v0.2.0) (2026-02-23)
+
+
+### ✨ Features
+
+* mirror probe auto-select, default to aliyun npmmirror ([2b6d130](https://github.com/KarinJS/snapka/commit/2b6d1304ab5d095731c08ea13e5dbfc64a5576ab))
+
+
+### 🐛 Bug Fixes
+
+* security and logic improvements across all packages ([9394626](https://github.com/KarinJS/snapka/commit/93946268d2031236494c05040efa8d38fb666ca9))
+* 修复各包单元测试并更新断言以匹配源码 ([8c343c5](https://github.com/KarinJS/snapka/commit/8c343c57d75800ef6dd6d9a6417b9c19970e89b4))
+
 ## [0.1.4](https://github.com/KarinJS/snapka/compare/browsers-v0.1.3...browsers-v0.1.4) (2025-12-04)
 
 

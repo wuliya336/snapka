@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.2.0](https://github.com/KarinJS/snapka/compare/puppeteer-v0.1.7...puppeteer-v0.2.0) (2026-02-23)
+
+
+### ✨ Features
+
+* mirror probe auto-select, default to aliyun npmmirror ([2b6d130](https://github.com/KarinJS/snapka/commit/2b6d1304ab5d095731c08ea13e5dbfc64a5576ab))
+
+
+### 🐛 Bug Fixes
+
+* security and logic improvements across all packages ([9394626](https://github.com/KarinJS/snapka/commit/93946268d2031236494c05040efa8d38fb666ca9))
+* 修复各包单元测试并更新断言以匹配源码 ([8c343c5](https://github.com/KarinJS/snapka/commit/8c343c57d75800ef6dd6d9a6417b9c19970e89b4))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @snapka/browser-finder bumped to 0.1.6
+    * @snapka/browsers bumped to 0.2.0
+    * @snapka/puppeteer-core bumped to 0.1.4
+    * @snapka/types bumped to 0.1.3
+
 ## [0.1.7](https://github.com/KarinJS/snapka/compare/puppeteer-v0.1.6...puppeteer-v0.1.7) (2026-01-18)
 
 
