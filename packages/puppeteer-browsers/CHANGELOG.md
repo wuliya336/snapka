@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/KarinJS/snapka/compare/browsers-v0.2.1...browsers-v0.2.2) (2026-02-23)
+
+
+### 🐛 Bug Fixes
+
+* **browsers:** probeUrls 仅探测 origin 并兜底返回首个 URL ([7cb0322](https://github.com/KarinJS/snapka/commit/7cb03223be4ca973cc3cf20720eb27f8e582515e))
+
 ## [0.2.1](https://github.com/KarinJS/snapka/compare/browsers-v0.2.0...browsers-v0.2.1) (2026-02-23)
 
 
