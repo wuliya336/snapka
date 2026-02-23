@@ -114,7 +114,7 @@ const core = await snapka.launch({
 const core = await snapka.launch({
   download: {
     enable: true,
-    baseUrl: 'https://registry.npmmirror.com/-/binary/chrome-for-testing-public',
+    baseUrl: 'https://registry.npmmirror.com/-/binary/chrome-for-testing',
     version: 'stable',
     browser: 'chrome-headless-shell',
   },
