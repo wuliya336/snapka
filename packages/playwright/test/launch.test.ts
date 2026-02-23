@@ -295,7 +295,7 @@ describe('PlaywrightLaunch', () => {
 
       expect(result).toBe(probeUrl)
       expect(mockBrowsers.probeUrls).toHaveBeenCalledWith([
-        'https://registry.npmmirror.com/-/binary/chrome-for-testing-public',
+        'https://registry.npmmirror.com/-/binary/chrome-for-testing',
         'https://storage.googleapis.com/chrome-for-testing-public',
       ])
     })

@@ -165,7 +165,7 @@ export class SnapkaLaunch {
         'https://storage.googleapis.com/chromium-browser-snapshots',
       ]
       : [
-        'https://registry.npmmirror.com/-/binary/chrome-for-testing-public',
+        'https://registry.npmmirror.com/-/binary/chrome-for-testing',
         'https://storage.googleapis.com/chrome-for-testing-public',
       ]
 

@@ -11,7 +11,7 @@ describe('browser-data 下载 URL', () => {
     it('默认应该使用阿里云镜像', () => {
       const url = resolveDownloadUrl(BrowserPlatform.WIN64, '120.0.6099.109')
       expect(url).toContain('registry.npmmirror.com')
-      expect(url).toContain('chrome-for-testing-public')
+      expect(url).toContain('chrome-for-testing')
     })
 
     it('应该支持自定义 baseUrl', () => {
