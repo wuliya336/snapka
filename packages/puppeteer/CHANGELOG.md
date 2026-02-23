@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.2.3](https://github.com/KarinJS/snapka/compare/puppeteer-v0.2.2...puppeteer-v0.2.3) (2026-02-23)
+
+
+### 🐛 Bug Fixes
+
+* chrome-for-testing-public ([22877a4](https://github.com/KarinJS/snapka/commit/22877a4ced64a67be311644ed53321399b0574f8))
+* chrome-for-testing-public ([b415de8](https://github.com/KarinJS/snapka/commit/b415de87b81debad4365d2caad1049509e168d35))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @snapka/browser-finder bumped to 0.1.9
+    * @snapka/browsers bumped to 0.2.3
+
 ## [0.2.2](https://github.com/KarinJS/snapka/compare/puppeteer-v0.2.1...puppeteer-v0.2.2) (2026-02-23)
 
 
