@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.1](https://github.com/KarinJS/snapka/compare/puppeteer-v0.2.0...puppeteer-v0.2.1) (2026-02-23)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @snapka/browser-finder bumped to 0.1.7
+    * @snapka/browsers bumped to 0.2.1
+
 ## [0.2.0](https://github.com/KarinJS/snapka/compare/puppeteer-v0.1.7...puppeteer-v0.2.0) (2026-02-23)
 
 

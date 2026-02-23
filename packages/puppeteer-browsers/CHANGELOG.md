@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.1](https://github.com/KarinJS/snapka/compare/browsers-v0.2.0...browsers-v0.2.1) (2026-02-23)
+
+
+### 🐛 Bug Fixes
+
+* **browsers:** align tsdown entry key with source filename so bin path is consistent after publish ([e636d22](https://github.com/KarinJS/snapka/commit/e636d22b44bcd9ba6f26a9d8f0bab2b2210fe6eb))
+* **browsers:** fix bin field pointing to source file instead of dist output ([eaef80d](https://github.com/KarinJS/snapka/commit/eaef80d0c547fb905679d498703c280a23dd950b))
+
 ## [0.2.0](https://github.com/KarinJS/snapka/compare/browsers-v0.1.4...browsers-v0.2.0) (2026-02-23)
 
 

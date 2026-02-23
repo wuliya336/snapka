@@ -1,6 +1,6 @@
 {
   "name": "@snapka/browsers",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Download and launch browsers for Puppeteer and Playwright",
   "keywords": [
     "puppeteer",
