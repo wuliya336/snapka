@@ -30,7 +30,9 @@
       "default": "./src/main.ts"
     }
   },
-  "bin": "src/main-cli.ts",
+  "bin": {
+    "browsers": "dist/cli.mjs"
+  },
   "files": [
     "dist"
   ],
@@ -57,7 +59,9 @@
     "node": ">=18"
   },
   "publishConfig": {
-    "bin": "dist/cli.mjs",
+    "bin": {
+      "browsers": "dist/cli.mjs"
+    },
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
