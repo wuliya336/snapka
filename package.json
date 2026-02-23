@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "sort": "pnpm -r exec sort-package-json"
+    "sort": "pnpm -r exec sort-package-json",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "test": "pnpm -r run test"
   },
   "keywords": [],
   "author": "shijin",
@@ -18,6 +22,8 @@
     "tsdown-config": "workspace:*",
     "tsup": "^8.5.1",
     "typescript": "6.0.0-dev.20251125",
-    "vitest": "^4.0.14"
+    "vitepress": "^1.6.4",
+    "vitest": "^4.0.14",
+    "vue": "^3.5.24"
   }
 }
