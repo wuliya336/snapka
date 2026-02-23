@@ -89,7 +89,11 @@ export async function getText (url: URL | string): Promise<string> {
 
 /**
  * URL 探针：返回第一个符合状态码条件的 URL
- * @param urls - 要检测的 URL 列表
+ *
+ * 优先使用列表中靠前的 URL（默认阿里云镜像），
+ * 后续 URL 会延迟发起请求，给优先源一个时间窗口。
+ *
+ * @param urls - 要检测的 URL 列表（靠前的优先级更高）
  * @param options - 配置选项
  * @returns 第一个成功的 URL，如果全部失败则抛出错误
  */
@@ -98,15 +102,21 @@ export async function probeUrls (
   options?: {
     validStatusCodes?: number[]
     timeout?: number
+    /** 每个后续 URL 相对于前一个的延迟（ms） @default 300 */
+    staggerDelay?: number
   }
 ): Promise<string> {
-  const { validStatusCodes = [200], timeout = 5000 } = options || {}
+  const { validStatusCodes = [200], timeout = 5000, staggerDelay = 300 } = options || {}
 
   if (urls.length === 0) {
     throw new Error('URL list cannot be empty')
   }
 
-  const probePromises = urls.map(async (url) => {
+  const probePromises = urls.map(async (url, index) => {
+    // 后续 URL 延迟发起，给优先源一个时间窗口
+    if (index > 0) {
+      await new Promise(resolve => setTimeout(resolve, staggerDelay * index))
+    }
     try {
       const response = await axios.head(url.toString(), {
         timeout,

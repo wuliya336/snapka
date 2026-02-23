@@ -86,7 +86,7 @@ export interface InstallOptions {
    *
    * @defaultValue Either
    *
-   * - https://storage.googleapis.com/chrome-for-testing-public or
+   * - https://registry.npmmirror.com/-/binary/chrome-for-testing-public or
    * - https://archive.mozilla.org/pub/firefox/nightly/latest-mozilla-central
    *
    */

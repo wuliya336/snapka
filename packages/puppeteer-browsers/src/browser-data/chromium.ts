@@ -44,7 +44,7 @@ function folder (platform: BrowserPlatform): string {
 export function resolveDownloadUrl (
   platform: BrowserPlatform,
   buildId: string,
-  baseUrl = 'https://storage.googleapis.com/chromium-browser-snapshots'
+  baseUrl = 'https://registry.npmmirror.com/-/binary/chromium-browser-snapshots'
 ): string {
   return `${baseUrl}/${resolveDownloadPath(platform, buildId).join('/')}`
 }

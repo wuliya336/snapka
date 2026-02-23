@@ -26,7 +26,7 @@ function folder (platform: BrowserPlatform): string {
 export function resolveDownloadUrl (
   platform: BrowserPlatform,
   buildId: string,
-  baseUrl = 'https://storage.googleapis.com/chrome-for-testing-public'
+  baseUrl = 'https://registry.npmmirror.com/-/binary/chrome-for-testing-public'
 ): string {
   return `${baseUrl}/${resolveDownloadPath(platform, buildId).join('/')}`
 }

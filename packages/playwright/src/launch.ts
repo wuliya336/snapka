@@ -170,13 +170,13 @@ export class PlaywrightLaunch {
     const browser = this.getBrowserType(options.browser)
 
     const baseUrl = await this.getBaseUrl(browser, options.baseUrl)
-    console.log('baseUrl', baseUrl)
 
     const buildId = await resolveBuildId(browser as any, platform, tag)
     const { executablePath } = await install({
       browser: browser as any,
       buildId,
       platform,
+      baseUrl,
       cacheDir: options.dir || `${os.homedir()}/.cache/playwright`,
       downloadProgressCallback: 'default',
       installDeps: true,
@@ -213,12 +213,12 @@ export class PlaywrightLaunch {
     }
     const baseUrls = browser === 'chromium'
       ? [
-        'https://storage.googleapis.com/chromium-browser-snapshots',
         'https://registry.npmmirror.com/-/binary/chromium-browser-snapshots',
+        'https://storage.googleapis.com/chromium-browser-snapshots',
       ]
       : [
-        'https://storage.googleapis.com/chrome-for-testing-public',
         'https://registry.npmmirror.com/-/binary/chrome-for-testing-public',
+        'https://storage.googleapis.com/chrome-for-testing-public',
       ]
 
     return probeUrls(baseUrls)
