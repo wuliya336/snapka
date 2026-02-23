@@ -6,7 +6,7 @@ import { defineConfig } from 'tsdown/config'
 export default defineConfig({
   entry: {
     index: 'src/main.ts',
-    cli: 'src/main-cli.ts',
+    'main-cli': 'src/main-cli.ts',
   },
   outExtensions: (context) => {
     if (context.format === 'es') {

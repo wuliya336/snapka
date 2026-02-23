@@ -31,7 +31,7 @@
     }
   },
   "bin": {
-    "browsers": "dist/cli.mjs"
+    "browsers": "dist/main-cli.mjs"
   },
   "files": [
     "dist"
@@ -60,7 +60,7 @@
   },
   "publishConfig": {
     "bin": {
-      "browsers": "dist/cli.mjs"
+      "browsers": "dist/main-cli.mjs"
     },
     "exports": {
       ".": {
