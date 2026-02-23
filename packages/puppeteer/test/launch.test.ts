@@ -281,8 +281,8 @@ describe('SnapkaLaunch', () => {
 
       expect(result).toBe(probeUrl)
       expect(mockBrowsers.probeUrls).toHaveBeenCalledWith([
-        'https://storage.googleapis.com/chromium-browser-snapshots',
         'https://registry.npmmirror.com/-/binary/chromium-browser-snapshots',
+        'https://storage.googleapis.com/chromium-browser-snapshots',
       ])
     })
 
@@ -295,8 +295,8 @@ describe('SnapkaLaunch', () => {
 
       expect(result).toBe(probeUrl)
       expect(mockBrowsers.probeUrls).toHaveBeenCalledWith([
-        'https://storage.googleapis.com/chrome-for-testing-public',
         'https://registry.npmmirror.com/-/binary/chrome-for-testing-public',
+        'https://storage.googleapis.com/chrome-for-testing-public',
       ])
     })
   })

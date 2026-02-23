@@ -31,7 +31,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc && tsdown"
+    "build": "tsc && tsdown",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "playwright-core": "^1.56.1"

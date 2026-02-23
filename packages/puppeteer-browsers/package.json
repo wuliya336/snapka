@@ -35,7 +35,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc && tsdown"
+    "build": "tsc && tsdown",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@karinjs/axios": "^1.13.2",

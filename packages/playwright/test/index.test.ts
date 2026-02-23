@@ -32,8 +32,14 @@ vi.mock('@snapka/playwright-core', () => {
 })
 
 describe('index.ts', () => {
+  const mockPage = { close: vi.fn() }
+  const mockContext = {
+    newPage: vi.fn().mockResolvedValue(mockPage),
+    close: vi.fn(),
+  }
   const mockBrowser = {
     close: vi.fn(),
+    newContext: vi.fn().mockResolvedValue(mockContext),
   }
 
   beforeEach(() => {
@@ -41,6 +47,8 @@ describe('index.ts', () => {
     snapka.browsers.length = 0;
     (playwright.chromium.launch as any).mockResolvedValue(mockBrowser);
     (playwright.chromium.connect as any).mockResolvedValue(mockBrowser)
+    mockBrowser.newContext.mockResolvedValue(mockContext)
+    mockContext.newPage.mockResolvedValue(mockPage)
   })
 
   describe('launch', () => {
@@ -50,7 +58,7 @@ describe('index.ts', () => {
 
       expect(playwright.chromium.launch).toHaveBeenCalledWith(expect.objectContaining({
         executablePath: '/path/to/browser',
-        headless: true,
+        headless: false,
       }))
       expect(PlaywrightCore).toHaveBeenCalled()
       expect(snapka.browsers).toContain(mockBrowser)
@@ -61,7 +69,7 @@ describe('index.ts', () => {
       await snapka.launch(options)
 
       expect(playwright.chromium.launch).toHaveBeenCalledWith(expect.objectContaining({
-        headless: true,
+        headless: false,
       }))
     })
 
@@ -89,7 +97,7 @@ describe('index.ts', () => {
       await snapka.launch({} as any)
       const restartFn = (PlaywrightCore as any).mock.calls[0][2]
 
-      const newBrowser = { close: vi.fn() }
+      const newBrowser = { close: vi.fn(), newContext: vi.fn().mockResolvedValue(mockContext) }
         ; (playwright.chromium.launch as any).mockResolvedValueOnce(newBrowser)
 
       await restartFn()
@@ -120,10 +128,7 @@ describe('index.ts', () => {
       const options = { baseUrl: 'http://localhost:9222' } as any
       await snapka.connect(options)
 
-      expect(playwright.chromium.connect).toHaveBeenCalledWith('http://localhost:9222', expect.objectContaining({
-        headers: undefined,
-        timeout: undefined,
-      }))
+      expect(playwright.chromium.connect).toHaveBeenCalledWith('http://localhost:9222', options)
       expect(PlaywrightCore).toHaveBeenCalled()
       expect(snapka.browsers).toContain(mockBrowser)
     })

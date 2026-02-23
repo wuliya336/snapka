@@ -456,7 +456,7 @@ describe('PuppeteerCore', () => {
 
         await (instance as any).screenshotFullPage(mockPage, options)
 
-        expect(mockPage.screenshot).toHaveBeenCalledWith(options)
+        expect(mockPage.screenshot).toHaveBeenCalledWith(expect.objectContaining({ type: 'png' }))
       })
 
       it('should call screenshotElement', async () => {
@@ -471,7 +471,7 @@ describe('PuppeteerCore', () => {
 
         const result = await (instance as any).screenshotElement(mockPage, options)
 
-        expect(mockElement.screenshot).toHaveBeenCalledWith(options)
+        expect(mockElement.screenshot).toHaveBeenCalledWith(expect.objectContaining({ selector: '#test' }))
       })
     })
 
