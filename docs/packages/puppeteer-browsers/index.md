@@ -23,10 +23,10 @@
 
 | 浏览器 | 默认源 |
 |--------|--------|
-| Chrome | `registry.npmmirror.com/-/binary/chrome-for-testing-public` |
+| Chrome | `registry.npmmirror.com/-/binary/chrome-for-testing` |
 | Chromium | `registry.npmmirror.com/-/binary/chromium-browser-snapshots` |
-| Chrome Headless Shell | `registry.npmmirror.com/-/binary/chrome-for-testing-public` |
-| ChromeDriver | `registry.npmmirror.com/-/binary/chrome-for-testing-public` |
+| Chrome Headless Shell | `registry.npmmirror.com/-/binary/chrome-for-testing` |
+| ChromeDriver | `registry.npmmirror.com/-/binary/chrome-for-testing` |
 | Firefox | `archive.mozilla.org` |
 
 ### 缓存结构
