@@ -394,10 +394,10 @@ export class PlaywrightCore {
    * @param timeout - 超时时间
    */
   private async waitForResource (
-    page: Page,
+    _page: Page,
     waitFn: () => Promise<unknown>,
     resource: string,
-    timeout: number
+    _timeout: number
   ): Promise<void> {
     await waitFn().catch(() => console.warn(`${resource} 加载超时`))
   }

@@ -8,8 +8,8 @@ import type {
   ScreenshotViewportPostBody,
   ScreenshotGetQuery,
   ScreenshotViewportGetQuery,
-  StatusCode,
 } from './types'
+import { StatusCode } from './types'
 
 const router = Router()
 
@@ -18,7 +18,7 @@ const router = Router()
  */
 function successResponse<T> (data: T, message = '成功'): ApiResponse<T> {
   return {
-    status: 200,
+    status: StatusCode.SUCCESS,
     message,
     data,
   }
@@ -46,6 +46,28 @@ function parseBoolean (value: any): boolean {
   return false
 }
 
+/** 禁止的 URL scheme */
+const BLOCKED_SCHEMES = ['file:', 'ftp:', 'data:', 'javascript:']
+
+/** 内网 IP 正则 */
+const PRIVATE_IP_RE = /^https?:\/\/(localhost|127\.|10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.|169\.254\.|0\.0\.0\.0|\[::1\]|\[::\])/i
+
+/**
+ * 校验 URL 安全性，防止 SSRF 攻击
+ */
+function validateUrl (url: string): boolean {
+  try {
+    const parsed = new URL(url)
+    if (BLOCKED_SCHEMES.includes(parsed.protocol)) return false
+    if (PRIVATE_IP_RE.test(url)) return false
+    if (!['http:', 'https:'].includes(parsed.protocol)) return false
+    return true
+  } catch {
+    // 允许本地文件路径（非 URL 格式），如 /path/to/file.html
+    return true
+  }
+}
+
 /**
  * POST /screenshot - 普通截图
  * 支持返回JSON或流
@@ -56,7 +78,12 @@ router.post('/screenshot', async (req, res) => {
     const { stream = false, ...screenshotOptions } = body
 
     if (!screenshotOptions.file) {
-      res.status(400).json(errorResponse(400, '参数错误', 'file参数是必需的'))
+      res.status(400).json(errorResponse(StatusCode.BAD_REQUEST, '参数错误', 'file参数是必需的'))
+      return
+    }
+
+    if (!validateUrl(screenshotOptions.file)) {
+      res.status(400).json(errorResponse(StatusCode.BAD_REQUEST, '参数错误', '不允许访问内部网络地址或不安全的协议'))
       return
     }
 
@@ -94,7 +121,7 @@ router.post('/screenshot', async (req, res) => {
     }
   } catch (error) {
     console.error('[Route] 截图失败:', error)
-    res.status(500).json(errorResponse(500, '截图失败', (error as Error).message))
+    res.status(500).json(errorResponse(StatusCode.INTERNAL_ERROR, '截图失败', (error as Error).message))
   }
 })
 
@@ -107,7 +134,12 @@ router.post('/screenshot/viewport', async (req, res) => {
     const body = req.body as ScreenshotViewportPostBody
 
     if (!body.file) {
-      res.status(400).json(errorResponse(400, '参数错误', 'file参数是必需的'))
+      res.status(400).json(errorResponse(StatusCode.BAD_REQUEST, '参数错误', 'file参数是必需的'))
+      return
+    }
+
+    if (!validateUrl(body.file)) {
+      res.status(400).json(errorResponse(StatusCode.BAD_REQUEST, '参数错误', '不允许访问内部网络地址或不安全的协议'))
       return
     }
 
@@ -132,7 +164,7 @@ router.post('/screenshot/viewport', async (req, res) => {
     res.json(successResponse(data, '分片截图成功'))
   } catch (error) {
     console.error('[Route] 分片截图失败:', error)
-    res.status(500).json(errorResponse(500, '分片截图失败', (error as Error).message))
+    res.status(500).json(errorResponse(StatusCode.INTERNAL_ERROR, '分片截图失败', (error as Error).message))
   }
 })
 
@@ -145,7 +177,12 @@ router.get('/screenshot', async (req, res) => {
     const query = req.query as ScreenshotGetQuery
 
     if (!query.file) {
-      res.status(400).json(errorResponse(400, '参数错误', 'file参数是必需的'))
+      res.status(400).json(errorResponse(StatusCode.BAD_REQUEST, '参数错误', 'file参数是必需的'))
+      return
+    }
+
+    if (!validateUrl(query.file)) {
+      res.status(400).json(errorResponse(StatusCode.BAD_REQUEST, '参数错误', '不允许访问内部网络地址或不安全的协议'))
       return
     }
 
@@ -189,7 +226,7 @@ router.get('/screenshot', async (req, res) => {
     }
   } catch (error) {
     console.error('[Route] 截图失败:', error)
-    res.status(500).json(errorResponse(500, '截图失败', (error as Error).message))
+    res.status(500).json(errorResponse(StatusCode.INTERNAL_ERROR, '截图失败', (error as Error).message))
   }
 })
 
@@ -202,7 +239,12 @@ router.get('/screenshot/viewport', async (req, res) => {
     const query = req.query as ScreenshotViewportGetQuery
 
     if (!query.file) {
-      res.status(400).json(errorResponse(400, '参数错误', 'file参数是必需的'))
+      res.status(400).json(errorResponse(StatusCode.BAD_REQUEST, '参数错误', 'file参数是必需的'))
+      return
+    }
+
+    if (!validateUrl(query.file)) {
+      res.status(400).json(errorResponse(StatusCode.BAD_REQUEST, '参数错误', '不允许访问内部网络地址或不安全的协议'))
       return
     }
 
@@ -233,7 +275,7 @@ router.get('/screenshot/viewport', async (req, res) => {
     res.json(successResponse(data, '分片截图成功'))
   } catch (error) {
     console.error('[Route] 分片截图失败:', error)
-    res.status(500).json(errorResponse(500, '分片截图失败', (error as Error).message))
+    res.status(500).json(errorResponse(StatusCode.INTERNAL_ERROR, '分片截图失败', (error as Error).message))
   }
 })
 
@@ -258,7 +300,7 @@ router.post('/browser/restart', async (req, res) => {
     res.json(successResponse({ restarted: true }, '浏览器重启成功'))
   } catch (error) {
     console.error('[Route] 浏览器重启失败:', error)
-    res.status(500).json(errorResponse(500, '浏览器重启失败', (error as Error).message))
+    res.status(500).json(errorResponse(StatusCode.INTERNAL_ERROR, '浏览器重启失败', (error as Error).message))
   }
 })
 

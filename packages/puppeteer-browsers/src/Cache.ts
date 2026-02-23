@@ -144,8 +144,11 @@ export class Cache {
     }
     // TODO: add type-safe parsing.
     const data = JSON.parse(fs.readFileSync(metatadaPath, 'utf8'))
-    if (typeof data !== 'object') {
+    if (typeof data !== 'object' || data === null) {
       throw new Error('.metadata is not an object')
+    }
+    if (!data.aliases || typeof data.aliases !== 'object') {
+      data.aliases = {}
     }
     return data
   }

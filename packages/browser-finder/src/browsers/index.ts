@@ -4,7 +4,7 @@
  */
 import fs from 'node:fs'
 import path from 'node:path'
-import { execSync } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
 import { findEdgeAll } from './edge'
 import { findBraveAll } from './brave'
 import { computeSystemExecutablePath, Browser, ChromeReleaseChannel } from '@snapka/browsers'
@@ -88,8 +88,8 @@ export class SystemBrowserFinder {
           // 系统浏览器的目录较为复杂，返回可执行文件所在目录的上一级目录
           dir: path.dirname(dir),
           get version () {
-            // 仅提取这种格式 144.0.7544.3
-            return execSync(`"${dir}" --version`).toString().trim().match(/\d+(?:\.\d+){2,3}/)?.[0] || ''
+            // 使用 execFileSync 避免 shell 注入风险
+            return execFileSync(dir, ['--version']).toString().trim().match(/\d+(?:\.\d+){2,3}/)?.[0] || ''
           },
         })
       } catch {

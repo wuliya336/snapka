@@ -27,18 +27,20 @@ export const snapka = {
     }
 
     options.executablePath = executablePath
-    const headless = options.headless
-      ? options.headless === 'shell' ? 'shell' : options.headless === 'new'
+    const headless: boolean | 'shell' = options.headless
+      ? options.headless === 'shell' ? 'shell' : options.headless !== 'false'
       : 'shell'
 
     const browser = await puppeteer.launch({ ...options, headless })
     browsers.push(browser)
 
+    let currentBrowser = browser
     const restart = async () => {
       const newBrowser = await puppeteer.launch({ ...options, headless })
       /** 替换掉旧的浏览器实例 */
-      const index = browsers.indexOf(browser)
+      const index = browsers.indexOf(currentBrowser)
       index > -1 ? browsers[index] = newBrowser : browsers.push(newBrowser)
+      currentBrowser = newBrowser
       return newBrowser
     }
 
@@ -54,11 +56,13 @@ export const snapka = {
     const browser = await puppeteer.connect({ ...options, browserURL })
     browsers.push(browser)
 
+    let currentBrowser = browser
     const restart = async () => {
       const newBrowser = await puppeteer.connect({ ...options, browserURL })
       /** 替换掉旧的浏览器实例 */
-      const index = browsers.indexOf(browser)
+      const index = browsers.indexOf(currentBrowser)
       index > -1 ? browsers[index] = newBrowser : browsers.push(newBrowser)
+      currentBrowser = newBrowser
       return newBrowser
     }
 

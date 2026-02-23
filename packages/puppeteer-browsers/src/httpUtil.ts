@@ -43,6 +43,10 @@ export async function downloadFile (
   })
 
   if (response.status !== 200) {
+    // 销毁流避免资源泄漏
+    if (response.data && typeof response.data.destroy === 'function') {
+      response.data.destroy()
+    }
     throw new Error(`Download failed: server returned code ${response.status}. URL: ${url}`)
   }
 

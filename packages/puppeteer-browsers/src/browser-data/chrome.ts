@@ -87,8 +87,11 @@ export async function getLastKnownGoodReleaseForChannel (
   }
 
   for (const channel of Object.keys(data.channels)) {
-    data.channels[channel.toLowerCase()] = data.channels[channel]!
-    delete data.channels[channel]
+    const lower = channel.toLowerCase()
+    if (lower !== channel) {
+      data.channels[lower] = data.channels[channel]!
+      delete data.channels[channel]
+    }
   }
 
   return (

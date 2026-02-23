@@ -83,9 +83,12 @@ export async function resolveBuildId (
 ): Promise<string> {
   const baseUrl = `https://registry.npmmirror.com/-/binary/chromium-browser-snapshots/${folder(platform)}/`
   const response = await axios.get<{ name: string }[]>(baseUrl).catch(() => null)
-  if (response) {
-    const versions = response.data?.[response?.data?.length - 1]?.name?.replace('/', '')
-    if (versions) return versions
+  if (response && Array.isArray(response.data) && response.data.length > 0) {
+    const last = response.data[response.data.length - 1]
+    if (last && typeof last.name === 'string') {
+      const versions = last.name.replace('/', '')
+      if (versions) return versions
+    }
   }
 
   return await getText(

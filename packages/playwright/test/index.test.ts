@@ -58,7 +58,7 @@ describe('index.ts', () => {
 
       expect(playwright.chromium.launch).toHaveBeenCalledWith(expect.objectContaining({
         executablePath: '/path/to/browser',
-        headless: false,
+        headless: true,
       }))
       expect(PlaywrightCore).toHaveBeenCalled()
       expect(snapka.browsers).toContain(mockBrowser)
@@ -69,16 +69,16 @@ describe('index.ts', () => {
       await snapka.launch(options)
 
       expect(playwright.chromium.launch).toHaveBeenCalledWith(expect.objectContaining({
-        headless: false,
+        headless: true,
       }))
     })
 
-    it('should handle "shell" headless mode', async () => {
-      const options = { headless: 'shell' } as any
+    it('should handle "false" headless mode (headed)', async () => {
+      const options = { headless: 'false' } as any
       await snapka.launch(options)
 
       expect(playwright.chromium.launch).toHaveBeenCalledWith(expect.objectContaining({
-        headless: true,
+        headless: false,
       }))
     })
 

@@ -28,7 +28,7 @@ export const snapka = {
 
     options.executablePath = executablePath
 
-    const headless = options.headless !== 'new'
+    const headless = options.headless !== 'false'
     const browser = await playwright.chromium.launch({ ...options, headless })
     const viewport = options.defaultViewport || { width: 800, height: 600 }
     browsers.push(browser)
@@ -37,10 +37,12 @@ export const snapka = {
     const context = await browser.newContext({ viewport })
     const initialPage = await context.newPage()
 
+    let currentBrowser = browser
     const restart = async () => {
       const newBrowser = await playwright.chromium.launch({ ...options, headless })
-      const index = browsers.indexOf(browser)
+      const index = browsers.indexOf(currentBrowser)
       index > -1 ? browsers[index] = newBrowser : browsers.push(newBrowser)
+      currentBrowser = newBrowser
       return newBrowser
     }
 
@@ -59,10 +61,12 @@ export const snapka = {
     const context = await browser.newContext({ viewport: options.defaultViewport || { width: 800, height: 600 } })
     const initialPage = await context.newPage()
 
+    let currentBrowser = browser
     const restart = async () => {
       const newBrowser = await playwright.chromium.connect(browserURL, options)
-      const index = browsers.indexOf(browser)
+      const index = browsers.indexOf(currentBrowser)
       index > -1 ? browsers[index] = newBrowser : browsers.push(newBrowser)
+      currentBrowser = newBrowser
       return newBrowser
     }
 

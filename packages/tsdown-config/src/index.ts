@@ -189,7 +189,7 @@ function removeDebugPlugin (): any {
                 false,
                 ts.factory.updateNamedExports(node.exportClause, elements),
                 node.moduleSpecifier,
-                node.assertClause
+                (node as any).attributes ?? (node as any).assertClause
               )
             }
 

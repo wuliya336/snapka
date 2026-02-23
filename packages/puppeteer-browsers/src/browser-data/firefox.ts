@@ -462,6 +462,12 @@ async function syncPreferences (options: ProfileOptions): Promise<void> {
 }
 
 export function compareVersions (a: string, b: string): number {
-  // TODO: this is a not very reliable check.
-  return parseInt(a.replace('.', ''), 16) - parseInt(b.replace('.', ''), 16)
+  const partsA = a.split('.').map(Number)
+  const partsB = b.split('.').map(Number)
+  const len = Math.max(partsA.length, partsB.length)
+  for (let i = 0; i < len; i++) {
+    const diff = (partsA[i] || 0) - (partsB[i] || 0)
+    if (diff !== 0) return diff
+  }
+  return 0
 }
