@@ -13,8 +13,6 @@ snapka/
 │   ├── playwright-core/     # playwright-core 的 re-export
 │   ├── puppeteer-browsers/  # 浏览器下载管理
 │   ├── browser-finder/      # 系统浏览器查找
-│   ├── puppeteer-express/   # Puppeteer HTTP 服务
-│   ├── playwright-express/  # Playwright HTTP 服务
 │   ├── snapka-types/        # 共享类型定义
 │   └── tsdown-config/       # 构建配置
 └── docs/                    # 文档站（VitePress）
@@ -34,9 +32,6 @@ snapka-types (类型定义)
     │     ↑
     │     ├── browser-finder
     │     └── puppeteer-browsers (下载管理)
-    │
-    ├── puppeteer-express ──→ puppeteer
-    └── playwright-express ──→ playwright
 ```
 
 ## 核心流程

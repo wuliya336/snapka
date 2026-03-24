@@ -48,13 +48,6 @@ export default defineConfig({
           ],
         },
         {
-          text: 'HTTP 服务',
-          items: [
-            { text: '@snapka/puppeteer-express', link: '/packages/puppeteer-express/' },
-            { text: '@snapka/playwright-express', link: '/packages/playwright-express/' },
-          ],
-        },
-        {
           text: '工具包',
           items: [
             { text: 'tsdown-config', link: '/packages/tsdown-config/' },
