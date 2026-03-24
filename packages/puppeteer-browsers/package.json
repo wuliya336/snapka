@@ -25,10 +25,7 @@
   "author": "The Chromium Authors",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./src/main.ts",
-      "default": "./src/main.ts"
-    }
+    ".": "./src/main.ts"
   },
   "bin": {
     "browsers": "dist/main-cli.mjs"

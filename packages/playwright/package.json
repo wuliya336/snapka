@@ -26,18 +26,9 @@
   "author": "shijin",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
-    },
-    "./playwright-core": {
-      "types": "./src/playwright-core.ts",
-      "default": "./src/playwright-core.ts"
-    },
-    "./snapka-browser-finder": {
-      "types": "./src/snapka-browser-finder.ts",
-      "default": "./src/snapka-browser-finder.ts"
-    }
+    ".": "./src/index.ts",
+    "./playwright-core": "./src/playwright-core.ts",
+    "./snapka-browser-finder": "./src/snapka-browser-finder.ts"
   },
   "files": [
     "dist"

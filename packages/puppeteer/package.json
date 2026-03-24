@@ -26,18 +26,9 @@
   "author": "shijin",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
-    },
-    "./puppeteer-core": {
-      "types": "./src/puppeteer-core.ts",
-      "default": "./src/puppeteer-core.ts"
-    },
-    "./snapka-browser-finder": {
-      "types": "./src/snapka-browser-finder.ts",
-      "default": "./src/snapka-browser-finder.ts"
-    }
+    ".": "./src/index.ts",
+    "./puppeteer-core": "./src/puppeteer-core.ts",
+    "./snapka-browser-finder": "./src/snapka-browser-finder.ts"
   },
   "files": [
     "dist"
