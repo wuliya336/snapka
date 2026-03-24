@@ -37,6 +37,7 @@ describe('PuppeteerCore', () => {
     mockBrowser = {
       newPage: vi.fn().mockResolvedValue(mockPage),
       close: vi.fn().mockResolvedValue(null),
+      on: vi.fn(),
     } as any
 
     mockOptions = {
@@ -111,7 +112,7 @@ describe('PuppeteerCore', () => {
 
   describe('restart', () => {
     it('should restart browser instance', async () => {
-      const newBrowser = {} as any
+      const newBrowser = { on: vi.fn() } as any
         ; (mockRestartFn as any).mockResolvedValue(newBrowser)
 
       await puppeteerCore.restart()
@@ -123,7 +124,7 @@ describe('PuppeteerCore', () => {
 
     it('should not start idle check when pageMode is disposable', async () => {
       const instance = new PuppeteerCore({ ...mockOptions, pageMode: 'disposable' }, mockBrowser, mockRestartFn)
-      const newBrowser = {} as any
+      const newBrowser = { on: vi.fn() } as any
         ; (mockRestartFn as any).mockResolvedValue(newBrowser)
 
       await instance.restart()
@@ -133,7 +134,7 @@ describe('PuppeteerCore', () => {
 
     it('should handle browser close error gracefully', async () => {
       const instance = new PuppeteerCore(mockOptions, mockBrowser, mockRestartFn)
-      const newBrowser = {} as any
+      const newBrowser = { on: vi.fn() } as any
       const closeMock = vi.fn().mockRejectedValue(new Error('Close failed'))
         ; (instance as any).browser.close = closeMock
         ; (mockRestartFn as any).mockResolvedValue(newBrowser)
