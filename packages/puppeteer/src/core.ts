@@ -100,6 +100,18 @@ export class PuppeteerCore {
    */
   private idleCheckTimer?: NodeJS.Timeout
 
+  /**
+   * 标记是否为主动断开连接（restart/close）
+   * @remarks 用于区分主动关闭和意外崩溃，避免触发自动重启
+   */
+  private isIntentionalDisconnect = false
+
+  /**
+   * 标记是否正在重启中
+   * @remarks 防止并发重启
+   */
+  private isRestarting = false
+
   constructor (
     options: PuppeteerLaunchOptions | PuppeteerConnectOptions,
     browser: Browser,
@@ -116,6 +128,8 @@ export class PuppeteerCore {
     if (this.shouldStartIdleCheck()) {
       this.startIdleCheck()
     }
+
+    this.setupCrashRecovery()
   }
 
   /**
@@ -141,21 +155,26 @@ export class PuppeteerCore {
    * @remarks 关闭当前浏览器并使用相同配置重新启动
    */
   async restart (): Promise<void> {
+    this.isIntentionalDisconnect = true
     this.stopIdleCheck()
     await this.closeAllPages()
     await this.browser.close().catch(() => { })
     const newBrowser = await this.restartFn()
     this.browser = newBrowser
+    this.isIntentionalDisconnect = false
 
     if (this.shouldStartIdleCheck()) {
       this.startIdleCheck()
     }
+
+    this.setupCrashRecovery()
   }
 
   /**
    * 销毁当前浏览器实例并清理所有资源
    */
   async close (): Promise<void> {
+    this.isIntentionalDisconnect = true
     this.stopIdleCheck()
     await this.closeAllPages()
     await this.browser.close()
@@ -219,7 +238,7 @@ export class PuppeteerCore {
           const element = await this.findElement(page, options.selector)
           if (!element) throw new Error('当前页面未找到任何可截图的元素')
 
-          const data = await this.captureViewportSlices(element, options)
+          const data = await this.captureViewportSlices(page, element, options)
           return data as T extends 'base64' ? string[] : Uint8Array[]
         }
 
@@ -283,6 +302,40 @@ export class PuppeteerCore {
    */
   private shouldStartIdleCheck (): boolean {
     return this.pageMode === 'reuse' && this.pageIdleTimeout > 0
+  }
+
+  /**
+   * 设置浏览器崩溃自动恢复
+   * @remarks 监听浏览器 disconnected 事件，在意外断开时自动重启
+   */
+  private setupCrashRecovery (): void {
+    this.browser.on('disconnected', async () => {
+      if (this.isIntentionalDisconnect || this.isRestarting) return
+
+      this.isRestarting = true
+      console.warn('[snapka] 浏览器意外断开连接，正在尝试重启...')
+
+      try {
+        this.stopIdleCheck()
+        this.pagePool.length = 0
+        this.activePages.clear()
+        this.pageIdleTimes.clear()
+
+        const newBrowser = await this.restartFn()
+        this.browser = newBrowser
+        this.setupCrashRecovery()
+
+        if (this.shouldStartIdleCheck()) {
+          this.startIdleCheck()
+        }
+
+        console.warn('[snapka] 浏览器重启成功')
+      } catch (error) {
+        console.error('[snapka] 浏览器重启失败:', error)
+      } finally {
+        this.isRestarting = false
+      }
+    })
   }
 
   /**
@@ -425,23 +478,25 @@ export class PuppeteerCore {
    * @returns 分片截图数据数组
    */
   private async captureViewportSlices<T extends 'base64' | 'binary'> (
+    page: Page,
     element: Awaited<ReturnType<Page['$']>>,
     options: SnapkaScreenshotViewportOptions<T>
   ): Promise<(string | Uint8Array)[]> {
     const box = await element!.boundingBox()
     if (!box) return []
 
-    const { width: boxWidth = 1200, height: boxHeight = 2000 } = box
+    const { x: boxX = 0, y: boxY = 0, width: boxWidth = 1200, height: boxHeight = 2000 } = box
     const viewportHeight = Math.max(toInteger(options.viewportHeight, 2000), 1)
     const totalPages = Math.ceil(boxHeight / viewportHeight)
     const data: (string | Uint8Array)[] = []
 
     for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
       const { y, height } = this.calculatePageDimensions(pageIndex, viewportHeight, boxHeight)
-      const img = await element!.screenshot({
+      const img = await page.screenshot({
         ...options,
         omitBackground: options.omitBackground ?? (!!(options.type === 'png' || !options.type)),
-        clip: { x: 0, y, width: boxWidth, height },
+        clip: { x: boxX, y: boxY + y, width: boxWidth, height },
+        captureBeyondViewport: true,
       }) as T extends 'base64' ? string : Uint8Array
       data.push(img)
     }
