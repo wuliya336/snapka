@@ -130,7 +130,7 @@ describe('PlaywrightCore', () => {
         }),
         close: vi.fn(),
       } as any
-      ;(mockRestartFn as any).mockResolvedValue(newBrowser)
+        ; (mockRestartFn as any).mockResolvedValue(newBrowser)
 
       await playwrightCore.restart()
 
@@ -147,8 +147,8 @@ describe('PlaywrightCore', () => {
         }),
         close: vi.fn(),
       } as any
-      ;(playwrightCore as any).browser.close = vi.fn().mockRejectedValue(new Error('Close failed'))
-      ;(mockRestartFn as any).mockResolvedValue(newBrowser)
+        ; (playwrightCore as any).browser.close = vi.fn().mockRejectedValue(new Error('Close failed'))
+        ; (mockRestartFn as any).mockResolvedValue(newBrowser)
 
       await playwrightCore.restart()
 
@@ -163,7 +163,7 @@ describe('PlaywrightCore', () => {
         }),
         close: vi.fn(),
       } as any
-      ;(mockRestartFn as any).mockResolvedValue(newBrowser)
+        ; (mockRestartFn as any).mockResolvedValue(newBrowser)
 
       await playwrightCore.restart()
 
@@ -179,7 +179,7 @@ describe('PlaywrightCore', () => {
         }),
         close: vi.fn(),
       } as any
-      ;(mockRestartFn as any).mockResolvedValue(newBrowser)
+        ; (mockRestartFn as any).mockResolvedValue(newBrowser)
 
       await playwrightCore.restart()
 
@@ -210,7 +210,7 @@ describe('PlaywrightCore', () => {
         }),
         close: vi.fn(),
       } as any
-      ;(mockRestartFn as any).mockResolvedValue(newBrowser)
+        ; (mockRestartFn as any).mockResolvedValue(newBrowser)
 
       // Simulate unexpected disconnect
       for (const cb of disconnectCallbacks) {
@@ -222,7 +222,7 @@ describe('PlaywrightCore', () => {
     })
 
     it('should not restart on intentional disconnect', async () => {
-      ;(playwrightCore as any).isIntentionalDisconnect = true
+      ; (playwrightCore as any).isIntentionalDisconnect = true
 
       for (const cb of disconnectCallbacks) {
         await cb()
@@ -232,7 +232,7 @@ describe('PlaywrightCore', () => {
     })
 
     it('should not restart when already restarting', async () => {
-      ;(playwrightCore as any).isRestarting = true
+      ; (playwrightCore as any).isRestarting = true
 
       for (const cb of disconnectCallbacks) {
         await cb()
@@ -243,7 +243,7 @@ describe('PlaywrightCore', () => {
 
     it('should handle restart failure gracefully', async () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { })
-      ;(mockRestartFn as any).mockRejectedValue(new Error('Restart failed'))
+        ; (mockRestartFn as any).mockRejectedValue(new Error('Restart failed'))
 
       for (const cb of disconnectCallbacks) {
         await cb()
@@ -309,7 +309,7 @@ describe('PlaywrightCore', () => {
     })
 
     it('should throw error when element not found', async () => {
-      ;(mockPage.locator as any).mockReturnValue({
+      ; (mockPage.locator as any).mockReturnValue({
         count: vi.fn().mockResolvedValue(0),
         first: vi.fn(),
       })
@@ -524,10 +524,10 @@ describe('PlaywrightCore', () => {
       const mockElement = {
         screenshot: vi.fn().mockResolvedValue(Buffer.from('mock-data')),
       }
-      ;(mockPage.locator as any).mockReturnValue({
-        count: vi.fn().mockResolvedValue(1),
-        first: vi.fn().mockReturnValue(mockElement),
-      })
+        ; (mockPage.locator as any).mockReturnValue({
+          count: vi.fn().mockResolvedValue(1),
+          first: vi.fn().mockReturnValue(mockElement),
+        })
 
       const result = await playwrightCore.screenshot(options)
       const data = await result.run()
@@ -555,10 +555,10 @@ describe('PlaywrightCore', () => {
       const mockElement = {
         boundingBox: vi.fn().mockResolvedValue({ x: 10, y: 20, width: 800, height: 2500 }),
       }
-      ;(mockPage.locator as any).mockReturnValue({
-        count: vi.fn().mockResolvedValue(1),
-        first: vi.fn().mockReturnValue(mockElement),
-      })
+        ; (mockPage.locator as any).mockReturnValue({
+          count: vi.fn().mockResolvedValue(1),
+          first: vi.fn().mockReturnValue(mockElement),
+        })
 
       const options: SnapkaScreenshotViewportOptions<'binary'> = {
         file: 'https://example.com',
@@ -583,10 +583,10 @@ describe('PlaywrightCore', () => {
       const mockElement = {
         boundingBox: vi.fn().mockResolvedValue({ x: 0, y: 0, width: 800, height: 2500 }),
       }
-      ;(mockPage.locator as any).mockReturnValue({
-        count: vi.fn().mockResolvedValue(1),
-        first: vi.fn().mockReturnValue(mockElement),
-      })
+        ; (mockPage.locator as any).mockReturnValue({
+          count: vi.fn().mockResolvedValue(1),
+          first: vi.fn().mockReturnValue(mockElement),
+        })
 
       const options: SnapkaScreenshotViewportOptions<'binary'> = {
         file: 'https://example.com',
@@ -615,10 +615,10 @@ describe('PlaywrightCore', () => {
       const mockElement = {
         boundingBox: vi.fn().mockResolvedValue({ x: 0, y: 0, width: 800, height: 5000 }),
       }
-      ;(mockPage.locator as any).mockReturnValue({
-        count: vi.fn().mockResolvedValue(1),
-        first: vi.fn().mockReturnValue(mockElement),
-      })
+        ; (mockPage.locator as any).mockReturnValue({
+          count: vi.fn().mockResolvedValue(1),
+          first: vi.fn().mockReturnValue(mockElement),
+        })
 
       const options: SnapkaScreenshotViewportOptions<'binary'> = {
         file: 'https://example.com',
@@ -650,7 +650,7 @@ describe('PlaywrightCore', () => {
     })
 
     it('should handle missing element', async () => {
-      ;(mockPage.locator as any).mockReturnValue({
+      ; (mockPage.locator as any).mockReturnValue({
         count: vi.fn().mockResolvedValue(0),
         first: vi.fn(),
       })
@@ -669,10 +669,10 @@ describe('PlaywrightCore', () => {
       const mockElement = {
         boundingBox: vi.fn().mockResolvedValue(null),
       }
-      ;(mockPage.locator as any).mockReturnValue({
-        count: vi.fn().mockResolvedValue(1),
-        first: vi.fn().mockReturnValue(mockElement),
-      })
+        ; (mockPage.locator as any).mockReturnValue({
+          count: vi.fn().mockResolvedValue(1),
+          first: vi.fn().mockReturnValue(mockElement),
+        })
 
       const options: SnapkaScreenshotViewportOptions<'binary'> = {
         file: 'https://example.com',
@@ -766,19 +766,19 @@ describe('PlaywrightCore', () => {
     describe('normalizeQuality', () => {
       it('should set quality to undefined for PNG', () => {
         const options: any = { type: 'png', quality: 80 }
-        ;(playwrightCore as any).normalizeQuality(options)
+          ; (playwrightCore as any).normalizeQuality(options)
         expect(options.quality).toBeUndefined()
       })
 
       it('should keep quality for JPEG', () => {
         const options: any = { type: 'jpeg', quality: 80 }
-        ;(playwrightCore as any).normalizeQuality(options)
+          ; (playwrightCore as any).normalizeQuality(options)
         expect(options.quality).toBe(80)
       })
 
       it('should set quality to undefined when not set', () => {
         const options: any = { type: 'jpeg' }
-        ;(playwrightCore as any).normalizeQuality(options)
+          ; (playwrightCore as any).normalizeQuality(options)
         expect(options.quality).toBeUndefined()
       })
     })
@@ -806,7 +806,7 @@ describe('PlaywrightCore', () => {
           count: vi.fn().mockResolvedValue(1),
           first: vi.fn().mockReturnValue('element1'),
         }
-        ;(mockPage.locator as any).mockReturnValue(mockLocator)
+          ; (mockPage.locator as any).mockReturnValue(mockLocator)
 
         const result = await (playwrightCore as any).findElement(mockPage, '#custom-selector')
 
@@ -821,10 +821,10 @@ describe('PlaywrightCore', () => {
           count: vi.fn().mockResolvedValue(1),
           first: vi.fn().mockReturnValue(bodyElement),
         }
-        ;(mockPage.locator as any)
-          .mockReturnValueOnce(mockLocatorEmpty) // #container count check
-          .mockReturnValueOnce(mockLocatorFound) // body count check
-          .mockReturnValueOnce(mockLocatorFound) // body first() call
+          ; (mockPage.locator as any)
+            .mockReturnValueOnce(mockLocatorEmpty) // #container count check
+            .mockReturnValueOnce(mockLocatorFound) // body count check
+            .mockReturnValueOnce(mockLocatorFound) // body first() call
 
         const result = await (playwrightCore as any).findElement(mockPage)
 
@@ -832,7 +832,7 @@ describe('PlaywrightCore', () => {
       })
 
       it('should return null when no element found', async () => {
-        ;(mockPage.locator as any).mockReturnValue({
+        ; (mockPage.locator as any).mockReturnValue({
           count: vi.fn().mockResolvedValue(0),
         })
 
@@ -867,7 +867,7 @@ describe('PlaywrightCore', () => {
       })
 
       it('should skip waitForSelector if element does not exist', async () => {
-        ;(mockPage.locator as any).mockReturnValue({
+        ; (mockPage.locator as any).mockReturnValue({
           count: vi.fn().mockResolvedValue(0),
           waitFor: vi.fn(),
         })
@@ -906,7 +906,7 @@ describe('PlaywrightCore', () => {
 
     describe('checkElement', () => {
       it('should return true when element exists', async () => {
-        ;(mockPage.locator as any).mockReturnValue({
+        ; (mockPage.locator as any).mockReturnValue({
           count: vi.fn().mockResolvedValue(1),
         })
 
@@ -915,7 +915,7 @@ describe('PlaywrightCore', () => {
       })
 
       it('should return false when element does not exist', async () => {
-        ;(mockPage.locator as any).mockReturnValue({
+        ; (mockPage.locator as any).mockReturnValue({
           count: vi.fn().mockResolvedValue(0),
         })
 
@@ -924,7 +924,7 @@ describe('PlaywrightCore', () => {
       })
 
       it('should handle error gracefully', async () => {
-        ;(mockPage.locator as any).mockReturnValue({
+        ; (mockPage.locator as any).mockReturnValue({
           count: vi.fn().mockRejectedValue(new Error('error')),
         })
 
@@ -956,7 +956,7 @@ describe('PlaywrightCore', () => {
 
     it('should close page on release', async () => {
       const page = { close: vi.fn().mockResolvedValue(undefined) } as any
-      ;(playwrightCore as any).activePages.add(page)
+        ; (playwrightCore as any).activePages.add(page)
 
       await (playwrightCore as any).releasePage(page)
 
@@ -968,11 +968,11 @@ describe('PlaywrightCore', () => {
   describe('retry parameter', () => {
     it('should respect retry count', async () => {
       let callCount = 0
-      ;(mockPage.screenshot as any).mockImplementation(() => {
-        callCount++
-        if (callCount < 3) throw new Error('Transient error')
-        return Promise.resolve(Buffer.from('success'))
-      })
+        ; (mockPage.screenshot as any).mockImplementation(() => {
+          callCount++
+          if (callCount < 3) throw new Error('Transient error')
+          return Promise.resolve(Buffer.from('success'))
+        })
 
       const options: SnapkaScreenshotOptions<'binary'> = {
         file: 'https://example.com',

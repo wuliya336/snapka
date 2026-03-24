@@ -35,7 +35,7 @@ describe('Playwright Integration Tests', () => {
 
   afterAll(async () => {
     if (available) {
-      await instance.close().catch(() => {})
+      await instance.close().catch(() => { })
     }
   }, 10000)
 
@@ -199,10 +199,10 @@ describe('Playwright Integration Tests', () => {
     it('浏览器意外断开后应自动恢复', async () => {
       if (!available) return
 
-      // Playwright 不暴露进程句柄，通过内部方式模拟意外断开
-      // 先重置 intentional flag，然后强制关闭底层连接
-      ;(instance as any).isIntentionalDisconnect = false
-      ;(instance as any).isRestarting = false
+        // Playwright 不暴露进程句柄，通过内部方式模拟意外断开
+        // 先重置 intentional flag，然后强制关闭底层连接
+        ; (instance as any).isIntentionalDisconnect = false
+        ; (instance as any).isRestarting = false
 
       // 使用 Playwright 内部 API 强制断开连接
       try {

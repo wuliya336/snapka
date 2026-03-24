@@ -35,7 +35,7 @@ describe('Puppeteer Integration Tests', () => {
 
   afterAll(async () => {
     if (available) {
-      await instance.close().catch(() => {})
+      await instance.close().catch(() => { })
     }
   }, 10000)
 
