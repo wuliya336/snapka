@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.11](https://github.com/KarinJS/snapka/compare/browser-finder-v0.1.10...browser-finder-v0.1.11) (2026-03-25)
+
+
+### 🐛 Bug Fixes
+
+* 1 ([f6b0fc4](https://github.com/KarinJS/snapka/commit/f6b0fc415a3928fcd0b33a855fe40d06431f9e31))
+
 ## [0.1.10](https://github.com/KarinJS/snapka/compare/browser-finder-v0.1.9...browser-finder-v0.1.10) (2026-03-25)
 
 
