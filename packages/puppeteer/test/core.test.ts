@@ -539,13 +539,11 @@ describe('PuppeteerCore', () => {
 
       it('should handle waitForResource timeout without throwing', async () => {
         const instance = new PuppeteerCore(mockOptions, mockBrowser, mockRestartFn)
-        const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { })
         const waitFn = vi.fn().mockRejectedValue(new Error('Timeout'))
 
         await (instance as any).waitForResource(mockPage, waitFn, 'test resource', 1000)
 
-        expect(consoleSpy).toHaveBeenCalledWith('test resource 加载超时')
-        consoleSpy.mockRestore()
+        expect(waitFn).toHaveBeenCalled()
       })
     })
 

@@ -43,6 +43,7 @@
     "@snapka/browsers": "workspace:*",
     "@snapka/puppeteer-core": "workspace:*",
     "@snapka/types": "workspace:*",
+    "debug": "^4.4.3",
     "p-limit": "catalog:"
   },
   "publishConfig": {

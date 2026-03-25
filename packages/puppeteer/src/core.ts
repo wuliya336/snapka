@@ -1,8 +1,11 @@
+import debug from 'debug'
 import pLimit from 'p-limit'
 import { getArray, isNumber, toInteger } from './util'
 import type { Browser, Page, WaitForOptions } from '@snapka/puppeteer-core'
 import type { PuppeteerConnectOptions, PuppeteerLaunchOptions } from './launch'
 import type { SnapkaScreenshotOptions, SnapkaScreenshotViewportOptions } from '@snapka/types'
+
+const log = debug('snapka:puppeteer')
 
 /**
  * Puppeteer 核心引擎实现
@@ -274,7 +277,7 @@ export class PuppeteerCore {
       } catch (error) {
         lastError = error as Error
         if (attempt < maxRetries) {
-          console.warn(`${operation}失败 (第 ${attempt}/${maxRetries} 次尝试): ${lastError.message}，正在重试...`)
+          log(`${operation}失败 (第 ${attempt}/${maxRetries} 次尝试): ${lastError.message}，正在重试...`)
           // 添加指数退避延迟
           await new Promise(resolve => setTimeout(resolve, Math.min(1000 * Math.pow(2, attempt - 1), 5000)))
         }
@@ -313,7 +316,7 @@ export class PuppeteerCore {
       if (this.isIntentionalDisconnect || this.isRestarting) return
 
       this.isRestarting = true
-      console.warn('[snapka] 浏览器意外断开连接，正在尝试重启...')
+      log('浏览器意外断开连接，正在尝试重启...')
 
       try {
         this.stopIdleCheck()
@@ -329,9 +332,9 @@ export class PuppeteerCore {
           this.startIdleCheck()
         }
 
-        console.warn('[snapka] 浏览器重启成功')
+        log('浏览器重启成功')
       } catch (error) {
-        console.error('[snapka] 浏览器重启失败:', error)
+        log('浏览器重启失败: %O', error)
       } finally {
         this.isRestarting = false
       }
@@ -540,7 +543,7 @@ export class PuppeteerCore {
     resource: string,
     _timeout: number
   ): Promise<void> {
-    await waitFn().catch(() => console.warn(`${resource} 加载超时`))
+    await waitFn().catch(() => log(`${resource} 加载超时`))
   }
 
   /**
