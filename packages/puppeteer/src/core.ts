@@ -123,9 +123,9 @@ export class PuppeteerCore {
     this.browser = browser
     this.options = options
     this.restartFn = restartFn
-    this.maxOpenPages = isNumber(options.maxOpenPages) ? options.maxOpenPages : 10
+    this.maxOpenPages = isNumber(options.maxOpenPages) && options.maxOpenPages > 0 ? options.maxOpenPages : 10
     this.pageMode = options.pageMode || 'reuse'
-    this.pageIdleTimeout = isNumber(options.pageIdleTimeout) ? options.pageIdleTimeout : 60000
+    this.pageIdleTimeout = isNumber(options.pageIdleTimeout) && options.pageIdleTimeout >= 0 ? options.pageIdleTimeout : 60000
     this.limit = pLimit(this.maxOpenPages)
 
     if (this.shouldStartIdleCheck()) {
@@ -160,6 +160,7 @@ export class PuppeteerCore {
   async restart (): Promise<void> {
     this.isIntentionalDisconnect = true
     this.stopIdleCheck()
+    this.browser.removeAllListeners('disconnected')
     await this.closeAllPages()
     await this.browser.close().catch(() => { })
     const newBrowser = await this.restartFn()
@@ -347,6 +348,7 @@ export class PuppeteerCore {
    */
   private startIdleCheck (): void {
     this.idleCheckTimer = setInterval(() => this.cleanIdlePages(), 30000)
+    this.idleCheckTimer.unref()
   }
 
   /**
@@ -364,17 +366,21 @@ export class PuppeteerCore {
    */
   private async cleanIdlePages (): Promise<void> {
     const now = Date.now()
-    const expiredPages = this.pagePool.filter(page => {
-      const idleTime = this.pageIdleTimes.get(page)
-      return idleTime && now - idleTime > this.pageIdleTimeout
-    })
+    const expiredPages: Page[] = []
 
-    for (const page of expiredPages) {
-      const index = this.pagePool.indexOf(page)
-      if (index > -1) this.pagePool.splice(index, 1)
-      this.pageIdleTimes.delete(page)
-      await page.close().catch(() => { })
+    // 先同步从池中移除所有过期页面，避免与 acquirePage 竞态
+    for (let i = this.pagePool.length - 1; i >= 0; i--) {
+      const page = this.pagePool[i]
+      const idleTime = this.pageIdleTimes.get(page)
+      if (idleTime && now - idleTime > this.pageIdleTimeout) {
+        this.pagePool.splice(i, 1)
+        this.pageIdleTimes.delete(page)
+        expiredPages.push(page)
+      }
     }
+
+    // 再异步关闭
+    await Promise.all(expiredPages.map(page => page.close().catch(() => { })))
   }
 
   /**
@@ -392,11 +398,17 @@ export class PuppeteerCore {
    * 从页面池获取或创建新页面
    */
   private async acquirePage (): Promise<Page> {
-    const page = this.pagePool.pop()
-    if (page) {
+    if (this.isRestarting || !this.browser.connected) {
+      throw new Error('浏览器已断开连接或正在重启中，请稍后重试')
+    }
+
+    while (this.pagePool.length > 0) {
+      const page = this.pagePool.pop()!
       this.pageIdleTimes.delete(page)
-      this.activePages.add(page)
-      return page
+      if (!page.isClosed()) {
+        this.activePages.add(page)
+        return page
+      }
     }
 
     const newPage = await this.browser.newPage()
