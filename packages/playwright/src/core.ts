@@ -92,7 +92,7 @@ export class PlaywrightCore {
     this.initialPage = initialPage
     this.options = options
     this.restartFn = restartFn
-    this.maxOpenPages = isNumber(options.maxOpenPages) ? options.maxOpenPages : 10
+    this.maxOpenPages = isNumber(options.maxOpenPages) && options.maxOpenPages > 0 ? options.maxOpenPages : 10
     this.limit = pLimit(this.maxOpenPages)
 
     this.setupCrashRecovery()
@@ -122,6 +122,7 @@ export class PlaywrightCore {
    */
   async restart (): Promise<void> {
     this.isIntentionalDisconnect = true
+    this.browser.removeAllListeners('disconnected')
     await this.closeAllPages()
     await this.browser.close().catch(() => { })
     const newBrowser = await this.restartFn()
@@ -304,6 +305,10 @@ export class PlaywrightCore {
    * 创建新页面
    */
   private async acquirePage (): Promise<Page> {
+    if (this.isRestarting || !this.browser.isConnected()) {
+      throw new Error('浏览器已断开连接或正在重启中，请稍后重试')
+    }
+
     const page = await this.context.newPage()
     this.activePages.add(page)
     return page
@@ -340,7 +345,7 @@ export class PlaywrightCore {
 
     const buffer = await page.screenshot(screenshotOptions)
     if (options.encoding === 'base64') {
-      return buffer.toString('base64') as any
+      return Buffer.from(buffer).toString('base64') as any
     }
     return buffer as any
   }
@@ -369,7 +374,7 @@ export class PlaywrightCore {
 
     const buffer = await element.screenshot(screenshotOptions)
     if (options.encoding === 'base64') {
-      return buffer.toString('base64') as any
+      return Buffer.from(buffer).toString('base64') as any
     }
     return buffer as any
   }
@@ -394,24 +399,36 @@ export class PlaywrightCore {
     const data: (string | Uint8Array)[] = []
     const type = options.type === 'webp' ? 'png' : options.type
 
-    for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
-      const { y, height } = this.calculatePageDimensions(pageIndex, viewportHeight, boxHeight)
+    // Playwright 的 clip 坐标必须在视口范围内，
+    // 临时调整视口高度以覆盖整个元素区域（等效于 Puppeteer 的 captureBeyondViewport: true）
+    const originalViewport = page.viewportSize() || { width: 1280, height: 800 }
+    const requiredHeight = Math.ceil(boxY + boxHeight)
+    if (requiredHeight > originalViewport.height) {
+      await page.setViewportSize({ width: originalViewport.width, height: requiredHeight })
+    }
 
-      const screenshotOptions: any = {
-        type,
-        quality: options.quality,
-        omitBackground: options.omitBackground ?? (type === 'png'),
-        fullPage: true,
-        clip: { x: boxX, y: boxY + y, width: boxWidth, height },
-        ...(options.playwright || {}),
-      }
+    try {
+      for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+        const { y, height } = this.calculatePageDimensions(pageIndex, viewportHeight, boxHeight)
 
-      const buffer = await page.screenshot(screenshotOptions)
-      if (options.encoding === 'base64') {
-        data.push(buffer.toString('base64'))
-      } else {
-        data.push(buffer)
+        const screenshotOptions: any = {
+          type,
+          quality: options.quality,
+          omitBackground: options.omitBackground ?? (type === 'png'),
+          clip: { x: boxX, y: boxY + y, width: boxWidth, height },
+          ...(options.playwright || {}),
+        }
+
+        const buffer = await page.screenshot(screenshotOptions)
+        if (options.encoding === 'base64') {
+          data.push(Buffer.from(buffer).toString('base64'))
+        } else {
+          data.push(buffer)
+        }
       }
+    } finally {
+      // 恢复原始视口大小
+      await page.setViewportSize(originalViewport).catch(() => { })
     }
 
     return data
