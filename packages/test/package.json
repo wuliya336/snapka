@@ -8,7 +8,9 @@
   "type": "module",
   "scripts": {
     "playwright": "tsx src/playwright-benchmark.ts",
-    "puppeteer": "tsx src/puppeteer-benchmark.ts"
+    "puppeteer": "tsx src/puppeteer-benchmark.ts",
+    "test:github:puppeteer": "tsx src/github-screenshot-test.ts puppeteer",
+    "test:github:playwright": "tsx src/github-screenshot-test.ts playwright"
   },
   "dependencies": {
     "@snapka/browser-finder": "workspace:*",

@@ -83,6 +83,10 @@ importers:
       p-limit:
         specifier: 'catalog:'
         version: 7.2.0
+    devDependencies:
+      '@types/debug':
+        specifier: 4.1.12
+        version: 4.1.12
 
   packages/playwright-core:
     devDependencies:
@@ -110,6 +114,10 @@ importers:
       p-limit:
         specifier: 'catalog:'
         version: 7.2.0
+    devDependencies:
+      '@types/debug':
+        specifier: 4.1.12
+        version: 4.1.12
 
   packages/puppeteer-browsers:
     devDependencies:
