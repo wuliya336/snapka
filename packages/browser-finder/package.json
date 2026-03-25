@@ -1,6 +1,6 @@
 {
   "name": "@snapka/browser-finder",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Cross-platform browser finder for Puppeteer, Playwright, and system browsers",
   "keywords": [
     "karinjs",

@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.3.0](https://github.com/KarinJS/snapka/compare/browsers-v0.2.3...browsers-v0.3.0) (2026-03-25)
+
+
+### ✨ Features
+
+* **browsers:** add system dependency detection module (deps.ts) ([59e228b](https://github.com/KarinJS/snapka/commit/59e228b5c79b8c5a05f862ed122c7bfc908d8882))
+* **browsers:** export checkDependencies/installDependencies from main ([4cc4064](https://github.com/KarinJS/snapka/commit/4cc4064d2eea736b6d966892d0a8f99ba158ff43))
+
+
+### 🐛 Bug Fixes
+
+* **puppeteer-browsers:** fix security and logic issues ([191c26e](https://github.com/KarinJS/snapka/commit/191c26e3cc5e1b73e22e15626730c0a01f389b0d))
+
+
+### 🎫 Chores
+
+* **browsers:** add deps testing script ([fe913cd](https://github.com/KarinJS/snapka/commit/fe913cd505c36ce7689ee65fc6a7e96f44c1d146))
+* **browsers:** add WSL dependency testing script ([42845d5](https://github.com/KarinJS/snapka/commit/42845d580b2d4671d959ddea56ee200add5a3b61))
+* simplify package.json exports ([604b6e8](https://github.com/KarinJS/snapka/commit/604b6e81123c42a64583d451dca39305ace07c05))
+
+
+### ♻️ Code Refactoring
+
+* **browsers:** replace old installDeps with deps module ([ce72746](https://github.com/KarinJS/snapka/commit/ce7274675e129988a2dda53f22949d5c3bb13b90))
+
+
+### ✅ Tests
+
+* **browsers:** add unit tests for deps module ([aca07f1](https://github.com/KarinJS/snapka/commit/aca07f17b4da6daeeca5ee0b05756b564719364a))
+
 ## [0.2.3](https://github.com/KarinJS/snapka/compare/browsers-v0.2.2...browsers-v0.2.3) (2026-02-23)
 
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.10](https://github.com/KarinJS/snapka/compare/browser-finder-v0.1.9...browser-finder-v0.1.10) (2026-03-25)
+
+
+### 🎫 Chores
+
+* simplify package.json exports ([604b6e8](https://github.com/KarinJS/snapka/commit/604b6e81123c42a64583d451dca39305ace07c05))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @snapka/browsers bumped to 0.3.0
+
 ## [0.1.9](https://github.com/KarinJS/snapka/compare/browser-finder-v0.1.8...browser-finder-v0.1.9) (2026-02-23)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/KarinJS/snapka/compare/puppeteer-core-v0.1.4...puppeteer-core-v0.1.5) (2026-03-25)
+
+
+### 🎫 Chores
+
+* simplify package.json exports ([604b6e8](https://github.com/KarinJS/snapka/commit/604b6e81123c42a64583d451dca39305ace07c05))
+
 ## [0.1.4](https://github.com/KarinJS/snapka/compare/puppeteer-core-v0.1.3...puppeteer-core-v0.1.4) (2026-02-23)
 
 

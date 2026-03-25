@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.2.4](https://github.com/KarinJS/snapka/compare/playwright-v0.2.3...playwright-v0.2.4) (2026-03-25)
+
+
+### 🐛 Bug Fixes
+
+* ci ([98f778b](https://github.com/KarinJS/snapka/commit/98f778b630cc5e639aae9971110b2da03fdb96ff))
+* **playwright:** fix viewport slicing clip out-of-bounds and add @types/debug ([7450f7c](https://github.com/KarinJS/snapka/commit/7450f7c1b7b41470770517fbcd22ce6038cfd7ce))
+* viewport slicing fullPage support and browser crash auto-recovery ([8e2d651](https://github.com/KarinJS/snapka/commit/8e2d6512ca2c62b7b572dd782128c1f152ee7b94))
+
+
+### 🎫 Chores
+
+* simplify package.json exports ([604b6e8](https://github.com/KarinJS/snapka/commit/604b6e81123c42a64583d451dca39305ace07c05))
+* 移除coverage ([7ae71b3](https://github.com/KarinJS/snapka/commit/7ae71b307d62f5f05b34bddb84e6b51bc4600a62))
+
+
+### ♻️ Code Refactoring
+
+* **playwright:** replace console with debug logger ([77529dc](https://github.com/KarinJS/snapka/commit/77529dc5b0815117513a12c51055801d71168025))
+
+
+### ✅ Tests
+
+* add comprehensive unit and integration tests for puppeteer and playwright ([0048a55](https://github.com/KarinJS/snapka/commit/0048a5526ef32f745b5524dd8eb5329366e188de))
+* **puppeteer,playwright:** fix mock objects to match updated source API ([ca8e01e](https://github.com/KarinJS/snapka/commit/ca8e01eeaa5f602aecfbb6980d10341e6162b838))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @snapka/browser-finder bumped to 0.1.10
+    * @snapka/browsers bumped to 0.3.0
+    * @snapka/playwright-core bumped to 0.1.4
+    * @snapka/types bumped to 0.1.4
+
 ## [0.2.3](https://github.com/KarinJS/snapka/compare/playwright-v0.2.2...playwright-v0.2.3) (2026-02-23)
 
 
