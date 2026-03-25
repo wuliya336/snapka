@@ -3,12 +3,35 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      publish_browsers:
+        description: '发布 browsers 包'
+        type: boolean
+        default: false
+      publish_types:
+        description: '发布 types 包'
+        type: boolean
+        default: false
+      publish_browser_finder:
+        description: '发布 browser-finder 包'
+        type: boolean
+        default: false
+      publish_playwright:
+        description: '发布 playwright 包'
+        type: boolean
+        default: false
+      publish_puppeteer:
+        description: '发布 puppeteer 包'
+        type: boolean
+        default: false
 permissions:
   contents: write
   pull-requests: write
   id-token: write
 jobs:
   release-please:
+    if: ${{ github.event_name == 'push' }}
     runs-on: macos-latest
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
@@ -25,8 +48,13 @@ jobs:
           manifest-file: .release-please-manifest.json
 
   publish:
-    needs: release-please
-    if: ${{ needs.release-please.outputs.releases_created == 'true' }}
+    needs: [release-please]
+    if: |
+      always() &&
+      (
+        (needs.release-please.result == 'success' && needs.release-please.outputs.releases_created == 'true') ||
+        github.event_name == 'workflow_dispatch'
+      )
     runs-on: macos-latest
     steps:
       - name: 检出代码
@@ -55,26 +83,26 @@ jobs:
         run: git config core.filemode false
 
       - name: 发布 browsers 包
-        if: ${{ needs.release-please.outputs.browsers_release == 'true' }}
+        if: ${{ (needs.release-please.outputs.browsers_release == 'true') || (github.event_name == 'workflow_dispatch' && inputs.publish_browsers == true) }}
         working-directory: packages/puppeteer-browsers
         run: pnpm publish
 
       - name: 发布 types 包
-        if: ${{ needs.release-please.outputs.types_release == 'true' }}
+        if: ${{ (needs.release-please.outputs.types_release == 'true') || (github.event_name == 'workflow_dispatch' && inputs.publish_types == true) }}
         working-directory: packages/snapka-types
         run: pnpm publish
 
       - name: 发布 browser-finder 包
-        if: ${{ needs.release-please.outputs.browser_finder_release == 'true' }}
+        if: ${{ (needs.release-please.outputs.browser_finder_release == 'true') || (github.event_name == 'workflow_dispatch' && inputs.publish_browser_finder == true) }}
         working-directory: packages/browser-finder
         run: pnpm publish
 
       - name: 发布 playwright 包
-        if: ${{ needs.release-please.outputs.playwright_release == 'true' }}
+        if: ${{ (needs.release-please.outputs.playwright_release == 'true') || (github.event_name == 'workflow_dispatch' && inputs.publish_playwright == true) }}
         working-directory: packages/playwright
         run: pnpm publish
 
       - name: 发布 puppeteer 包
-        if: ${{ needs.release-please.outputs.puppeteer_release == 'true' }}
+        if: ${{ (needs.release-please.outputs.puppeteer_release == 'true') || (github.event_name == 'workflow_dispatch' && inputs.publish_puppeteer == true) }}
         working-directory: packages/puppeteer
         run: pnpm publish
