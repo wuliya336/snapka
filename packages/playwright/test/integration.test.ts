@@ -211,8 +211,13 @@ describe('Playwright Integration Tests', () => {
         // 关闭可能抛异常
       }
 
-      // 等待自动恢复完成
-      await new Promise(resolve => setTimeout(resolve, 5000))
+      // 轮询等待自动恢复完成（最多 20 秒）
+      const deadline = Date.now() + 20000
+      while (Date.now() < deadline) {
+        const isRestarting = (instance as any).isRestarting as boolean
+        if (!isRestarting && instance.browser.isConnected()) break
+        await new Promise(resolve => setTimeout(resolve, 500))
+      }
 
       // 验证恢复后可正常截图
       const { run } = await instance.screenshot({ file: BASIC_HTML, fullPage: true })

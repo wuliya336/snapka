@@ -127,48 +127,26 @@ describe('PlaywrightCore', () => {
 
   describe('restart', () => {
     it('should restart browser instance', async () => {
-      const newBrowser = {
-        on: vi.fn(),
-        newContext: vi.fn().mockResolvedValue({
-          newPage: vi.fn().mockResolvedValue({ close: vi.fn() }),
-        }),
-        close: vi.fn(),
-      } as any
-        ; (mockRestartFn as any).mockResolvedValue(newBrowser)
-
       await playwrightCore.restart()
 
-      expect(mockBrowser.close).toHaveBeenCalled()
-      expect(mockRestartFn).toHaveBeenCalled()
-      expect((playwrightCore as any).browser).toBe(newBrowser)
+      // Soft restart: close old context and create a new one on the SAME browser
+      expect(mockContext.close).toHaveBeenCalled()
+      expect(mockBrowser.newContext).toHaveBeenCalled()
+      // Browser process is NOT restarted
+      expect((playwrightCore as any).browser).toBe(mockBrowser)
+      expect(mockRestartFn).not.toHaveBeenCalled()
     })
 
-    it('should handle browser close error gracefully', async () => {
-      const newBrowser = {
-        on: vi.fn(),
-        newContext: vi.fn().mockResolvedValue({
-          newPage: vi.fn().mockResolvedValue({ close: vi.fn() }),
-        }),
-        close: vi.fn(),
-      } as any
-        ; (playwrightCore as any).browser.close = vi.fn().mockRejectedValue(new Error('Close failed'))
-        ; (mockRestartFn as any).mockResolvedValue(newBrowser)
+    it('should handle context close error gracefully', async () => {
+      mockContext.close = vi.fn().mockRejectedValue(new Error('Close failed'))
 
       await playwrightCore.restart()
 
-      expect((playwrightCore as any).browser).toBe(newBrowser)
+      // Should still succeed and create a new context
+      expect(mockBrowser.newContext).toHaveBeenCalled()
     })
 
     it('should set isIntentionalDisconnect during restart', async () => {
-      const newBrowser = {
-        on: vi.fn(),
-        newContext: vi.fn().mockResolvedValue({
-          newPage: vi.fn().mockResolvedValue({ close: vi.fn() }),
-        }),
-        close: vi.fn(),
-      } as any
-        ; (mockRestartFn as any).mockResolvedValue(newBrowser)
-
       await playwrightCore.restart()
 
       // After restart completes, flag should be reset
@@ -176,18 +154,10 @@ describe('PlaywrightCore', () => {
     })
 
     it('should setup crash recovery on new browser after restart', async () => {
-      const newBrowser = {
-        on: vi.fn(),
-        newContext: vi.fn().mockResolvedValue({
-          newPage: vi.fn().mockResolvedValue({ close: vi.fn() }),
-        }),
-        close: vi.fn(),
-      } as any
-        ; (mockRestartFn as any).mockResolvedValue(newBrowser)
-
       await playwrightCore.restart()
 
-      expect(newBrowser.on).toHaveBeenCalledWith('disconnected', expect.any(Function))
+      // Browser is reused, so crash recovery listener remains on the original browser
+      expect((playwrightCore as any).browser).toBe(mockBrowser)
     })
   })
 
@@ -246,7 +216,7 @@ describe('PlaywrightCore', () => {
     })
 
     it('should handle restart failure gracefully', async () => {
-      ;(mockRestartFn as any).mockRejectedValue(new Error('Restart failed'))
+      ; (mockRestartFn as any).mockRejectedValue(new Error('Restart failed'))
 
       for (const cb of disconnectCallbacks) {
         await cb()

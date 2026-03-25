@@ -118,21 +118,19 @@ export class PlaywrightCore {
 
   /**
    * 重启浏览器实例
-   * @remarks 关闭当前浏览器并使用相同配置重新启动
+   * @remarks 关闭旧 Context 并在同一浏览器进程上重新创建，比关闭/重启浏览器进程更快、更可靠。
+   *          如需完整进程级重启，请调用 close() 后重新 launch()。
+   *          浏览器进程意外崩溃时由 setupCrashRecovery 负责完整重启。
    */
   async restart (): Promise<void> {
     this.isIntentionalDisconnect = true
-    this.browser.removeAllListeners('disconnected')
     await this.closeAllPages()
-    await this.browser.close().catch(() => { })
-    const newBrowser = await this.restartFn()
-    this.browser = newBrowser
-    this.context = await newBrowser.newContext({
+    await this.context.close().catch(() => { })
+    this.context = await this.browser.newContext({
       viewport: this.options.defaultViewport || { width: 800, height: 600 },
     })
     this.initialPage = await this.context.newPage()
     this.isIntentionalDisconnect = false
-    this.setupCrashRecovery()
   }
 
   /**
