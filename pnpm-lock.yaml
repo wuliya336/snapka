@@ -77,6 +77,9 @@ importers:
       '@snapka/types':
         specifier: workspace:*
         version: link:../snapka-types
+      debug:
+        specifier: ^4.4.3
+        version: 4.4.3
       p-limit:
         specifier: 'catalog:'
         version: 7.2.0
@@ -101,6 +104,9 @@ importers:
       '@snapka/types':
         specifier: workspace:*
         version: link:../snapka-types
+      debug:
+        specifier: ^4.4.3
+        version: 4.4.3
       p-limit:
         specifier: 'catalog:'
         version: 7.2.0
