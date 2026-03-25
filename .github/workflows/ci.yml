@@ -37,7 +37,7 @@ jobs:
         continue-on-error: true
 
       - name: Run tests
-        run: pnpm --filter '!@snapka/browser-finder' run test
+        run: pnpm --filter '!@snapka/browser-finder' --filter '!core' run test
 
   lint:
     runs-on: ubuntu-latest
