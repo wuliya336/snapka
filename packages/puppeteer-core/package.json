@@ -29,7 +29,6 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc && tsdown",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
