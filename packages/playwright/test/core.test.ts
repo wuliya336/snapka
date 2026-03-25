@@ -37,6 +37,8 @@ describe('PlaywrightCore', () => {
       waitForResponse: vi.fn().mockResolvedValue(null),
       close: vi.fn().mockResolvedValue(null),
       setExtraHTTPHeaders: vi.fn().mockResolvedValue(null),
+      viewportSize: vi.fn().mockReturnValue({ width: 1280, height: 800 }),
+      setViewportSize: vi.fn().mockResolvedValue(null),
     } as any
 
     mockInitialPage = {
@@ -58,6 +60,8 @@ describe('PlaywrightCore', () => {
           disconnectCallbacks.push(callback)
         }
       }),
+      removeAllListeners: vi.fn(),
+      isConnected: vi.fn().mockReturnValue(true),
     } as any
 
     mockOptions = {

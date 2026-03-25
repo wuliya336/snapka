@@ -31,6 +31,7 @@ describe('PuppeteerCore', () => {
       waitForResponse: vi.fn().mockResolvedValue(null),
       close: vi.fn().mockResolvedValue(null),
       setExtraHTTPHeaders: vi.fn().mockResolvedValue(null),
+      isClosed: vi.fn().mockReturnValue(false),
     } as any
 
     // 模拟 Browser
@@ -38,6 +39,8 @@ describe('PuppeteerCore', () => {
       newPage: vi.fn().mockResolvedValue(mockPage),
       close: vi.fn().mockResolvedValue(null),
       on: vi.fn(),
+      removeAllListeners: vi.fn(),
+      connected: true,
     } as any
 
     mockOptions = {
