@@ -6,7 +6,7 @@
 
 import assert from 'node:assert'
 import { spawnSync } from 'node:child_process'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { mkdir, unlink } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
@@ -21,6 +21,7 @@ import {
 } from './browser-data/browser-data.js'
 import { Cache, InstalledBrowser } from './Cache.js'
 import debug from 'debug'
+import { checkDependencies, installDependencies } from './deps.js'
 import { detectBrowserPlatform } from './detectPlatform.js'
 import { unpackArchive } from './fileUtil.js'
 import { downloadFile, getJSON, headHttpRequest } from './httpUtil.js'
@@ -221,38 +222,26 @@ async function installDeps (installedBrowser: InstalledBrowser) {
   ) {
     return
   }
-  // Currently, only Debian-like deps are supported.
-  const depsPath = path.join(
-    path.dirname(installedBrowser.executablePath),
-    'deb.deps'
-  )
-  if (!existsSync(depsPath)) {
-    debugInstall(`deb.deps file was not found at ${depsPath}`)
+
+  const execPath = installedBrowser.executablePath
+  const check = checkDependencies(execPath)
+
+  if (check.ok) {
+    debugInstall('All system dependencies are satisfied')
     return
   }
-  const data = readFileSync(depsPath, 'utf-8').split('\n').join(',')
-  if (process.getuid?.() !== 0) {
-    throw new Error('Installing system dependencies requires root privileges')
+
+  debugInstall(`Missing libraries: ${check.missingLibraries.join(', ')}`)
+  debugInstall(`Missing packages: ${check.missingPackages.join(', ')}`)
+  if (check.unmappedLibraries.length > 0) {
+    debugInstall(`Unmapped libraries: ${check.unmappedLibraries.join(', ')}`)
   }
-  let result = spawnSync('apt-get', ['-v'])
-  if (result.status !== 0) {
-    throw new Error(
-      'Failed to install system dependencies: apt-get does not seem to be available'
-    )
+
+  const success = installDependencies(execPath)
+  if (!success) {
+    const cmd = check.installCommand || `ldd ${execPath} to see missing libraries`
+    debugInstall(`Auto-install failed. Manual command: sudo ${cmd}`)
   }
-  debugInstall(`Trying to install dependencies: ${data}`)
-  result = spawnSync('apt-get', [
-    'satisfy',
-    '-y',
-    data,
-    '--no-install-recommends',
-  ])
-  if (result.status !== 0) {
-    throw new Error(
-      `Failed to install system dependencies: status=${result.status},error=${result.error},stdout=${result.stdout.toString('utf8')},stderr=${result.stderr.toString('utf8')}`
-    )
-  }
-  debugInstall(`Installed system dependencies ${data}`)
 }
 
 async function installUrl (
