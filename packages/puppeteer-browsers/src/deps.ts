@@ -5,7 +5,7 @@
  * 结合了 Puppeteer 的 deb.deps 方式和 Playwright 的 ldd 检测方式
  */
 
-import { execSync, spawnSync } from 'node:child_process'
+import { spawnSync } from 'node:child_process'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import path from 'node:path'
 
@@ -188,6 +188,7 @@ function findMissingDebPackages (debEntries: string[]): string[] {
 
 /**
  * 使用 apt-get satisfy 安装 (Puppeteer 方式)
+ * 使用 spawnSync 避免 shell 注入风险
  */
 function tryAptSatisfy (depsPath: string): boolean {
   const data = readFileSync(depsPath, 'utf-8').split('\n').filter(Boolean).join(',')
@@ -196,27 +197,26 @@ function tryAptSatisfy (depsPath: string): boolean {
   const versionResult = spawnSync('apt-get', ['-v'], { timeout: 5000 })
   if (versionResult.status !== 0) return false
 
-  const cmd = buildRootCommand(`apt-get satisfy -y --no-install-recommends "${data}"`)
-  if (!cmd) return false
+  if (!canRunAsRoot()) return false
 
-  debugDeps(`执行: ${cmd}`)
-  try {
-    execSync(cmd, { stdio: 'inherit', timeout: 300000 })
-    return true
-  } catch (e) {
-    debugDeps(`apt-get satisfy 失败: ${e}`)
+  const args = ['satisfy', '-y', '--no-install-recommends', data]
+  const { bin, args: finalArgs } = wrapWithRoot(args, 'apt-get')
+
+  debugDeps(`执行: ${bin} ${finalArgs.join(' ')}`)
+  const result = spawnSync(bin, finalArgs, { stdio: 'inherit', timeout: 300000 })
+  if (result.status !== 0) {
+    debugDeps(`apt-get satisfy 失败: exit code ${result.status}`)
     return false
   }
+  return true
 }
 
 /**
  * 使用 apt-get install 安装 (Playwright 方式)
+ * 使用 spawnSync 避免 shell 注入风险
  */
 function tryAptInstall (packages: string[]): boolean {
-  const updateCmd = buildRootCommand('apt-get update -qq')
-  const installCmd = buildRootCommand(`apt-get install -y --no-install-recommends ${packages.join(' ')}`)
-
-  if (!installCmd) {
+  if (!canRunAsRoot()) {
     debugDeps(
       `需要 root 权限安装系统依赖。请手动执行: ` +
       `sudo apt-get update && sudo apt-get install -y --no-install-recommends ${packages.join(' ')}`
@@ -225,13 +225,17 @@ function tryAptInstall (packages: string[]): boolean {
   }
 
   try {
-    if (updateCmd) {
-      debugDeps(`执行: ${updateCmd}`)
-      execSync(updateCmd, { stdio: 'inherit', timeout: 120000 })
-    }
-    debugDeps(`执行: ${installCmd}`)
-    execSync(installCmd, { stdio: 'inherit', timeout: 300000 })
-    return true
+    const { bin: updateBin, args: updateArgs } = wrapWithRoot(['update', '-qq'], 'apt-get')
+    debugDeps(`执行: ${updateBin} ${updateArgs.join(' ')}`)
+    spawnSync(updateBin, updateArgs, { stdio: 'inherit', timeout: 120000 })
+
+    const { bin: installBin, args: installArgs } = wrapWithRoot(
+      ['install', '-y', '--no-install-recommends', ...packages],
+      'apt-get'
+    )
+    debugDeps(`执行: ${installBin} ${installArgs.join(' ')}`)
+    const result = spawnSync(installBin, installArgs, { stdio: 'inherit', timeout: 300000 })
+    return result.status === 0
   } catch (e) {
     debugDeps(`apt-get install 失败: ${e}`)
     debugDeps(
@@ -243,22 +247,22 @@ function tryAptInstall (packages: string[]): boolean {
 }
 
 /**
- * 构建提权命令
- * root 用户直接执行，否则尝试 sudo
+ * 检查是否能以 root 权限执行命令
  */
-function buildRootCommand (command: string): string | null {
-  if (process.getuid?.() === 0) {
-    return command
-  }
-
-  // 检查 sudo 是否可用
+function canRunAsRoot (): boolean {
+  if (process.getuid?.() === 0) return true
   const sudoResult = spawnSync('sudo', ['-n', 'true'], { timeout: 5000 })
-  if (sudoResult.status === 0) {
-    return `sudo ${command}`
-  }
+  return sudoResult.status === 0
+}
 
-  // sudo 需要密码，无法自动执行
-  return null
+/**
+ * 包装命令以 root 权限执行（不拼接字符串，返回 bin + args 数组）
+ */
+function wrapWithRoot (args: string[], command: string): { bin: string, args: string[] } {
+  if (process.getuid?.() === 0) {
+    return { bin: command, args }
+  }
+  return { bin: 'sudo', args: ['-n', command, ...args] }
 }
 
 /**

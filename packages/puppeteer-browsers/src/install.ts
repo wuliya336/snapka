@@ -288,6 +288,7 @@ async function installUrl (
     options.buildId
   )
 
+  let extractSuccess = false
   try {
     if (existsSync(outputPath)) {
       const installedBrowser = new InstalledBrowser(
@@ -319,6 +320,7 @@ async function installUrl (
     try {
       debugTime('extract')
       await unpackArchive(archivePath, outputPath)
+      extractSuccess = true
     } finally {
       debugTimeEnd('extract')
     }
@@ -341,7 +343,8 @@ async function installUrl (
     }
     return installedBrowser
   } finally {
-    if (existsSync(archivePath)) {
+    // 仅在解压成功后删除归档文件，失败时保留避免重新下载
+    if (existsSync(archivePath) && extractSuccess) {
       await unlink(archivePath)
     }
   }

@@ -54,6 +54,7 @@ export async function downloadFile (
   response.data.pipe(file)
 
   return new Promise<void>((resolve, reject) => {
+    response.data.on('error', reject)
     file.on('close', resolve)
     file.on('error', reject)
   })

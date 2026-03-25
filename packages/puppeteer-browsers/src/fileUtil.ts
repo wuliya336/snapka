@@ -20,15 +20,14 @@ export async function unpackArchive (
     folderPath = path.resolve(process.cwd(), folderPath)
   }
   if (archivePath.endsWith('.zip') || archivePath.endsWith('.tar.bz2') || archivePath.endsWith('.tar.xz')) {
-    const files = await decompress(archivePath, folderPath)
-    // Zip Slip 防护：验证所有解压文件是否在目标目录内
+    // Zip Slip 防护：在解压时过滤掉逃逸目标目录的文件
     const resolved = path.resolve(folderPath)
-    for (const file of files) {
-      const filePath = path.resolve(folderPath, file.path)
-      if (!filePath.startsWith(resolved + path.sep) && filePath !== resolved) {
-        throw new Error(`Zip Slip detected: ${file.path} escapes target directory`)
-      }
-    }
+    await decompress(archivePath, folderPath, {
+      filter: (file) => {
+        const filePath = path.resolve(folderPath, file.path)
+        return filePath.startsWith(resolved + path.sep) || filePath === resolved
+      },
+    })
   } else if (archivePath.endsWith('.dmg')) {
     await mkdir(folderPath)
     await installDMG(archivePath, folderPath)

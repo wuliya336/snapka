@@ -268,11 +268,12 @@ function parseFolderPath (
   folderPath: string
 ): { platform: string; buildId: string } | undefined {
   const name = path.basename(folderPath)
-  const splits = name.split('-')
-  if (splits.length !== 2) {
+  const idx = name.indexOf('-')
+  if (idx <= 0 || idx === name.length - 1) {
     return
   }
-  const [platform, buildId] = splits
+  const platform = name.slice(0, idx)
+  const buildId = name.slice(idx + 1)
   if (!buildId || !platform) {
     return
   }
