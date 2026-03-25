@@ -71,9 +71,6 @@ importers:
       '@snapka/browsers':
         specifier: workspace:*
         version: link:../puppeteer-browsers
-      '@snapka/playwright-core':
-        specifier: workspace:*
-        version: link:../playwright-core
       '@snapka/types':
         specifier: workspace:*
         version: link:../snapka-types
@@ -83,6 +80,9 @@ importers:
       p-limit:
         specifier: 'catalog:'
         version: 7.2.0
+      playwright-core:
+        specifier: ^1.56.1
+        version: 1.56.1
     devDependencies:
       '@types/debug':
         specifier: 4.1.12
@@ -102,9 +102,6 @@ importers:
       '@snapka/browsers':
         specifier: workspace:*
         version: link:../puppeteer-browsers
-      '@snapka/puppeteer-core':
-        specifier: workspace:*
-        version: link:../puppeteer-core
       '@snapka/types':
         specifier: workspace:*
         version: link:../snapka-types
@@ -114,6 +111,9 @@ importers:
       p-limit:
         specifier: 'catalog:'
         version: 7.2.0
+      puppeteer-core:
+        specifier: ^24.31.0
+        version: 24.31.0
     devDependencies:
       '@types/debug':
         specifier: 4.1.12

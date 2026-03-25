@@ -1,6 +1,6 @@
 import { PuppeteerCore } from './core'
 import { SnapkaLaunch } from './launch'
-import puppeteer, { Browser } from '@snapka/puppeteer-core'
+import puppeteer, { Browser } from 'puppeteer-core'
 
 import type { PuppeteerLaunchOptions, PuppeteerConnectOptions } from './launch'
 

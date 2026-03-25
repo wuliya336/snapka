@@ -1,7 +1,7 @@
 /* eslint-disable @stylistic/indent */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { PlaywrightCore } from '../src/core'
-import type { Browser, Page, BrowserContext } from '@snapka/playwright-core'
+import type { Browser, Page, BrowserContext } from 'playwright-core'
 import type { PlaywrightLaunchOptions } from '../src/launch'
 import type { SnapkaScreenshotOptions, SnapkaScreenshotViewportOptions } from '@snapka/types'
 

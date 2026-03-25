@@ -1,7 +1,7 @@
 import debug from 'debug'
 import pLimit from 'p-limit'
 import { getArray, isNumber, toInteger } from './util'
-import type { Browser, Page, BrowserContext } from '@snapka/playwright-core'
+import type { Browser, Page, BrowserContext } from 'playwright-core'
 import type { PlaywrightLaunchOptions, PlaywrightConnectOptions } from './launch'
 import type { SnapkaScreenshotOptions, SnapkaScreenshotViewportOptions } from '@snapka/types'
 

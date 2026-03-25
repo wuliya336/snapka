@@ -14,10 +14,8 @@ jobs:
       releases_created: ${{ steps.release.outputs.releases_created }}
       browser_finder_release: ${{ steps.release.outputs['packages/browser-finder--release_created'] }}
       playwright_release: ${{ steps.release.outputs['packages/playwright--release_created'] }}
-      playwright_core_release: ${{ steps.release.outputs['packages/playwright-core--release_created'] }}
       puppeteer_release: ${{ steps.release.outputs['packages/puppeteer--release_created'] }}
       browsers_release: ${{ steps.release.outputs['packages/puppeteer-browsers--release_created'] }}
-      puppeteer_core_release: ${{ steps.release.outputs['packages/puppeteer-core--release_created'] }}
       types_release: ${{ steps.release.outputs['packages/snapka-types--release_created'] }}
     steps:
       - uses: googleapis/release-please-action@v4
@@ -64,28 +62,18 @@ jobs:
       - name: 发布 types 包
         if: ${{ needs.release-please.outputs.types_release == 'true' }}
         working-directory: packages/snapka-types
-
         run: pnpm publish
-      - name: 发布 playwright-core 包
-        if: ${{ needs.release-please.outputs.playwright_core_release == 'true' }}
-        working-directory: packages/playwright-core
 
-        run: pnpm publish
-      - name: 发布 puppeteer-core 包
-        if: ${{ needs.release-please.outputs.puppeteer_core_release == 'true' }}
-        working-directory: packages/puppeteer-core
-
-        run: pnpm publish
       - name: 发布 browser-finder 包
         if: ${{ needs.release-please.outputs.browser_finder_release == 'true' }}
         working-directory: packages/browser-finder
-
         run: pnpm publish
+
       - name: 发布 playwright 包
         if: ${{ needs.release-please.outputs.playwright_release == 'true' }}
         working-directory: packages/playwright
-
         run: pnpm publish
+
       - name: 发布 puppeteer 包
         if: ${{ needs.release-please.outputs.puppeteer_release == 'true' }}
         working-directory: packages/puppeteer

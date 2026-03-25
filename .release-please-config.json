@@ -87,20 +87,6 @@
       "tag-separator": "-",
       "scope": "browser-finder"
     },
-    "packages/playwright-core": {
-      "release-type": "node",
-      "package-name": "@snapka/playwright-core",
-      "component": "playwright-core",
-      "tag-separator": "-",
-      "scope": "playwright-core"
-    },
-    "packages/puppeteer-core": {
-      "release-type": "node",
-      "package-name": "@snapka/puppeteer-core",
-      "component": "puppeteer-core",
-      "tag-separator": "-",
-      "scope": "puppeteer-core"
-    },
     "packages/playwright": {
       "release-type": "node",
       "package-name": "@snapka/playwright",

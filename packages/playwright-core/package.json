@@ -32,8 +32,8 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
-  "peerDependencies": {
-    "playwright-core": ">=1.0.0"
+  "devDependencies": {
+    "playwright-core": "^1.56.1"
   },
   "publishConfig": {
     "exports": {

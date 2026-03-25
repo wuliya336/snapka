@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { snapka } from '../src/index'
 import { PuppeteerCore } from '../src/core'
-import puppeteer from '@snapka/puppeteer-core'
+import puppeteer from 'puppeteer-core'
 
 // Mock dependencies
 vi.mock('../src/launch', () => {
@@ -20,7 +20,7 @@ vi.mock('../src/core', () => {
   }
 })
 
-vi.mock('@snapka/puppeteer-core', () => {
+vi.mock('puppeteer-core', () => {
   return {
     default: {
       launch: vi.fn(),

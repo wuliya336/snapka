@@ -1,2 +1,2 @@
-export * from '@snapka/puppeteer-core'
-export { default } from '@snapka/puppeteer-core'
+export * from 'puppeteer-core'
+export { default } from 'puppeteer-core'

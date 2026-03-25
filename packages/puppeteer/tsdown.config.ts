@@ -6,5 +6,8 @@ export default defineConfig({
     './src/puppeteer-core.ts',
     './src/snapka-browser-finder.ts',
   ],
+  deps: {
+    neverBundle: ['puppeteer-core'],
+  },
   dts: true,
 })

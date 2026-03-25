@@ -3,7 +3,7 @@ import os from 'node:os'
 import { browserFinder } from '@snapka/browser-finder'
 import { probeUrls, resolveBuildId, install, detectBrowserPlatform } from '@snapka/browsers'
 
-import type { LaunchOptions, ConnectOptions } from '@snapka/puppeteer-core'
+import type { LaunchOptions, ConnectOptions } from 'puppeteer-core'
 import type { LaunchOptions as SnapkaLaunchOptions, ConnectOptions as SnapkaConnectOptions } from '@snapka/types'
 
 export interface PuppeteerLaunchOptions extends Omit<SnapkaLaunchOptions, 'defaultViewport'>, Omit<LaunchOptions, 'headless'> {

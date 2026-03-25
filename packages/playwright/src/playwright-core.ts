@@ -1,2 +1,2 @@
-export * from '@snapka/playwright-core'
-export { default } from '@snapka/playwright-core'
+export * from 'playwright-core'
+export { default } from 'playwright-core'

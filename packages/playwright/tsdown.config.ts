@@ -6,5 +6,8 @@ export default defineConfig({
     './src/playwright-core.ts',
     './src/snapka-browser-finder.ts',
   ],
+  deps: {
+    neverBundle: ['playwright-core'],
+  },
   dts: true,
 })

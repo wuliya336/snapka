@@ -41,10 +41,10 @@
   "dependencies": {
     "@snapka/browser-finder": "workspace:*",
     "@snapka/browsers": "workspace:*",
-    "@snapka/playwright-core": "workspace:*",
     "@snapka/types": "workspace:*",
     "debug": "^4.4.3",
-    "p-limit": "catalog:"
+    "p-limit": "catalog:",
+    "playwright-core": "^1.56.1"
   },
   "publishConfig": {
     "exports": {

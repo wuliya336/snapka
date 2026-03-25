@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { snapka } from '../src/index'
 import { PlaywrightCore } from '../src/core'
-import playwright from '@snapka/playwright-core'
+import playwright from 'playwright-core'
 
 // Mock dependencies
 vi.mock('../src/launch', () => {
@@ -20,7 +20,7 @@ vi.mock('../src/core', () => {
   }
 })
 
-vi.mock('@snapka/playwright-core', () => {
+vi.mock('playwright-core', () => {
   return {
     default: {
       chromium: {

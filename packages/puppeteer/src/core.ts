@@ -1,7 +1,7 @@
 import debug from 'debug'
 import pLimit from 'p-limit'
 import { getArray, isNumber, toInteger } from './util'
-import type { Browser, Page, WaitForOptions } from '@snapka/puppeteer-core'
+import type { Browser, Page, WaitForOptions } from 'puppeteer-core'
 import type { PuppeteerConnectOptions, PuppeteerLaunchOptions } from './launch'
 import type { SnapkaScreenshotOptions, SnapkaScreenshotViewportOptions } from '@snapka/types'
 

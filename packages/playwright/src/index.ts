@@ -1,6 +1,6 @@
 import { PlaywrightCore } from './core'
 import { PlaywrightLaunch } from './launch'
-import playwright, { Browser } from '@snapka/playwright-core'
+import playwright, { Browser } from 'playwright-core'
 
 import type { PlaywrightLaunchOptions, PlaywrightConnectOptions } from './launch'
 
