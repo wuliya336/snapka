@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.7](https://github.com/KarinJS/snapka/compare/playwright-v0.2.6...playwright-v0.2.7) (2026-03-25)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @snapka/browser-finder bumped to 0.1.12
+    * @snapka/browsers bumped to 0.4.0
+    * @snapka/types bumped to 0.1.5
+
 ## [0.2.6](https://github.com/KarinJS/snapka/compare/playwright-v0.2.5...playwright-v0.2.6) (2026-03-25)
 
 

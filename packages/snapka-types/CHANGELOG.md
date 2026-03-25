@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/KarinJS/snapka/compare/types-v0.1.4...types-v0.1.5) (2026-03-25)
+
+
+### 🐛 Bug Fixes
+
+* 我没招咧 ([a36fe49](https://github.com/KarinJS/snapka/commit/a36fe49104acc4abc6864231d12af42fefe67b34))
+
 ## [0.1.4](https://github.com/KarinJS/snapka/compare/types-v0.1.3...types-v0.1.4) (2026-03-25)
 
 

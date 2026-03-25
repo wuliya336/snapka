@@ -1,6 +1,6 @@
 {
   "name": "@snapka/puppeteer",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Enhanced Puppeteer with browser finder and parallel screenshot capabilities",
   "keywords": [
     "puppeteer",

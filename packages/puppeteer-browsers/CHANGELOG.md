@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/KarinJS/snapka/compare/browsers-v0.3.0...browsers-v0.4.0) (2026-03-25)
+
+
+### ✨ Features
+
+* 1 ([5e2c0b8](https://github.com/KarinJS/snapka/commit/5e2c0b85fd980b3543858e50f7de2ffab64a5096))
+
 ## [0.3.0](https://github.com/KarinJS/snapka/compare/browsers-v0.2.3...browsers-v0.3.0) (2026-03-25)
 
 
