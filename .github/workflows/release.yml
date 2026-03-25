@@ -6,23 +6,23 @@ on:
   workflow_dispatch:
     inputs:
       publish_browsers:
-        description: '发布 browsers 包'
+        description: "发布 browsers 包"
         type: boolean
         default: false
       publish_types:
-        description: '发布 types 包'
+        description: "发布 types 包"
         type: boolean
         default: false
       publish_browser_finder:
-        description: '发布 browser-finder 包'
+        description: "发布 browser-finder 包"
         type: boolean
         default: false
       publish_playwright:
-        description: '发布 playwright 包'
+        description: "发布 playwright 包"
         type: boolean
         default: false
       publish_puppeteer:
-        description: '发布 puppeteer 包'
+        description: "发布 puppeteer 包"
         type: boolean
         default: false
 permissions:
