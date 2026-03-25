@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/KarinJS/snapka/compare/playwright-v0.2.4...playwright-v0.2.5) (2026-03-25)
+
+
+### ♻️ Code Refactoring
+
+* remove custom core packages, use official playwright-core and puppeteer-core ([5a8db3d](https://github.com/KarinJS/snapka/commit/5a8db3dffd2dd555139cb11d2c384d850bf63815))
+
 ## [0.2.4](https://github.com/KarinJS/snapka/compare/playwright-v0.2.3...playwright-v0.2.4) (2026-03-25)
 
 
