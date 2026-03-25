@@ -1,8 +1,11 @@
+import debug from 'debug'
 import pLimit from 'p-limit'
 import { getArray, isNumber, toInteger } from './util'
 import type { Browser, Page, BrowserContext } from '@snapka/playwright-core'
 import type { PlaywrightLaunchOptions, PlaywrightConnectOptions } from './launch'
 import type { SnapkaScreenshotOptions, SnapkaScreenshotViewportOptions } from '@snapka/types'
+
+const log = debug('snapka:playwright')
 
 /**
  * Playwright 核心引擎实现
@@ -234,7 +237,7 @@ export class PlaywrightCore {
       } catch (error) {
         lastError = error as Error
         if (attempt < maxRetries) {
-          console.warn(`${operation}失败 (第 ${attempt}/${maxRetries} 次尝试): ${lastError.message}，正在重试...`)
+          log(`${operation}失败 (第 ${attempt}/${maxRetries} 次尝试): ${lastError.message}，正在重试...`)
           await new Promise(resolve => setTimeout(resolve, Math.min(1000 * Math.pow(2, attempt - 1), 5000)))
         }
       }
@@ -275,7 +278,7 @@ export class PlaywrightCore {
       if (this.isIntentionalDisconnect || this.isRestarting) return
 
       this.isRestarting = true
-      console.warn('[snapka] 浏览器意外断开连接，正在尝试重启...')
+      log('浏览器意外断开连接，正在尝试重启...')
 
       try {
         this.activePages.clear()
@@ -288,9 +291,9 @@ export class PlaywrightCore {
         this.initialPage = await this.context.newPage()
         this.setupCrashRecovery()
 
-        console.warn('[snapka] 浏览器重启成功')
+        log('浏览器重启成功')
       } catch (error) {
-        console.error('[snapka] 浏览器重启失败:', error)
+        log('浏览器重启失败: %O', error)
       } finally {
         this.isRestarting = false
       }
@@ -450,7 +453,7 @@ export class PlaywrightCore {
     resource: string,
     _timeout: number
   ): Promise<void> {
-    await waitFn().catch(() => console.warn(`${resource} 加载超时`))
+    await waitFn().catch(() => log(`${resource} 加载超时`))
   }
 
   /**

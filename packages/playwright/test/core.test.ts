@@ -242,19 +242,13 @@ describe('PlaywrightCore', () => {
     })
 
     it('should handle restart failure gracefully', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { })
-        ; (mockRestartFn as any).mockRejectedValue(new Error('Restart failed'))
+      ;(mockRestartFn as any).mockRejectedValue(new Error('Restart failed'))
 
       for (const cb of disconnectCallbacks) {
         await cb()
       }
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        '[snapka] 浏览器重启失败:',
-        expect.any(Error)
-      )
       expect((playwrightCore as any).isRestarting).toBe(false)
-      consoleSpy.mockRestore()
     })
   })
 
@@ -935,13 +929,11 @@ describe('PlaywrightCore', () => {
 
     describe('waitForResource', () => {
       it('should handle timeout without throwing', async () => {
-        const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { })
         const waitFn = vi.fn().mockRejectedValue(new Error('Timeout'))
 
         await (playwrightCore as any).waitForResource(mockPage, waitFn, 'test resource', 1000)
 
-        expect(consoleSpy).toHaveBeenCalledWith('test resource 加载超时')
-        consoleSpy.mockRestore()
+        expect(waitFn).toHaveBeenCalled()
       })
     })
   })
